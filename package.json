@@ -1,0 +1,24 @@
+{
+  "name": "auto-video-translator",
+  "version": "0.0.1",
+  "description": "Change the video language using AI like on YouTube, but totally local",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adriabama06/auto-video-translator.git"
+  },
+  "author": "adriabama06",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adriabama06/auto-video-translator/issues"
+  },
+  "homepage": "https://github.com/adriabama06/auto-video-translator#readme",
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.3",
+    "openai": "^5.12.2"
+  }
+}

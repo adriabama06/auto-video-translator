@@ -1,3 +1,6 @@
+# Custom
+*.bin
+
 # Logs
 logs
 *.log

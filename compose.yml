@@ -1,0 +1,66 @@
+services:
+  whisper-stt:
+    ports:
+      - 8881:8000
+    image: ghcr.io/speaches-ai/speaches:latest-cuda-12.6.3
+    restart: always
+    volumes:
+      - ./model_aliases.turbo.json:/home/ubuntu/speaches/model_aliases.json
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+  kokoro-tts:
+    ports:
+      - 8882:8880
+    image: ghcr.io/remsky/kokoro-fastapi-gpu:v0.2.1
+    restart: always
+    environment:
+      - DOWNLOAD_MODEL=true
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8880/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+  libretranslate:
+    image: libretranslate/libretranslate:v1.7.2-cuda
+    ports:
+      - "8883:5000"
+    environment:
+      - LT_UPDATE_MODELS=true
+      - LT_LOAD_ONLY=en,es
+    tty: true
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
+      interval: 10s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
