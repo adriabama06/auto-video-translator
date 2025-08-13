@@ -1,0 +1,24 @@
+FROM pytorch/pytorch:2.8.0-cuda12.6-cudnn9-runtime
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    curl git \
+    python3 \
+    python3-pip \
+    ffmpeg \
+    && apt-get clean
+
+RUN git clone https://github.com/index-tts/index-tts.git --depth 1 . && git reset --hard 9098497272d5803bae46cbaf5154cf2ba48f6866
+
+RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir fastapi uvicorn
+
+# Predownload models
+RUN huggingface-cli download IndexTeam/IndexTTS-1.5 \
+  config.yaml bigvgan_discriminator.pth bigvgan_generator.pth bpe.model dvae.pth gpt.pth unigram_12000.vocab \
+  --local-dir checkpoints
+
+COPY ./app.indextts.1.5.py /app/app.py
+
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

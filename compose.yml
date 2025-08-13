@@ -41,6 +41,28 @@ services:
               count: all
               capabilities:
                 - gpu
+  indextts:
+    ports:
+      - 8882:8000
+    image: adriabama06/indextts
+    build:
+      context: util
+      dockerfile: util/Dockerfile.indextts.1.5
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:
