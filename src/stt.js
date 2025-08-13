@@ -46,11 +46,11 @@ export function processSentences(segments) {
 
     for (let i = 0; i < segments.length; i++) {
         const currentSegment = segments[i];
-        
+
         var accumulation = currentSegment.text.trim();
 
         // It has already end of sequence.
-        if(accumulation.includes(".")) {
+        if (accumulation.endsWith(".") || i + 1 >= segments.length) {
             subtitles.push({
                 start: currentSegment.start,
                 end: currentSegment.end,
@@ -60,24 +60,45 @@ export function processSentences(segments) {
             continue;
         }
 
-        // This is the end of the text, nothing more can't be added.
-        if(i + 1 >= segments.length) {
+// I will disable this option for now.
+/*
+        if (accumulation.includes("...")) {
+            let [first, ...second] = accumulation.split("...");
+
+            // Join again the rest of the content
+            second = second.join("...");
+
+            const cutAmount = first.length / accumulation.length;
+
+            const cuttedTime = (currentSegment.end - currentSegment.start) * cutAmount;
+
+            const nextSegment = segments[i + 1];
+
+            const delay = nextSegment.start - currentSegment.end;
+
+            currentSegment.end = currentSegment.start + cuttedTime;
+
+            nextSegment.start = currentSegment.end + delay;
+
+            nextSegment.text = second + " " + nextSegment.text;
+
             subtitles.push({
                 start: currentSegment.start,
                 end: currentSegment.end,
-                text: accumulation
+                text: first + "..."
             });
 
-            break;
+            continue;
         }
+*/
 
         for (let j = i + 1; j < segments.length; j++) {
             const testSegment = segments[j];
 
-            accumulation += (" " + testSegment.text.trim()); 
+            accumulation += (" " + testSegment.text.trim());
 
             // It has already end of sequence found.
-            if(accumulation.includes(".")) {
+            if (accumulation.endsWith(".") || j + 1 >= segments.length) {
                 subtitles.push({
                     start: currentSegment.start,
                     end: testSegment.end,
@@ -88,6 +109,40 @@ export function processSentences(segments) {
 
                 break;
             }
+
+// I will disable this option for now.
+/*
+            if (accumulation.includes("...")) {
+                let [first, ...second] = accumulation.split("...");
+
+                // Join again the rest of the content
+                second = second.join("...");
+
+                const cutAmount = first.length / accumulation.length;
+
+                const cuttedTime = (testSegment.end - currentSegment.start) * cutAmount;
+
+                const nextSegment = segments[j + 1];
+
+                const delay = nextSegment.start - testSegment.end;
+
+                testSegment.end = currentSegment.start + cuttedTime;
+
+                nextSegment.start = testSegment.end + delay;
+
+                nextSegment.text = second + " " + nextSegment.text;
+
+                subtitles.push({
+                    start: currentSegment.start,
+                    end: testSegment.end,
+                    text: first + "..."
+                });
+
+                i = j;
+
+                break;
+            }
+*/
         }
     }
 
@@ -165,7 +220,7 @@ export async function transcribeAudio(audioFilePath) {
         // Transcribe audio
         const transcription = await whipserTranscribe(audioFilePath);
 
-        if(!transcription) return;
+        if (!transcription) return;
 
         // Process complete sentences
         const subtitles = processSentences(transcription.segments);
