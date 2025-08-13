@@ -57,7 +57,15 @@ export async function textToSpeechOpenAI(text, targetDuration) {
 
     const duration_temp = await getDuration(temp_file);
 
-    const finalSpeed = duration_temp / targetDuration;
+    let finalSpeed = duration_temp / targetDuration;
+
+    // Fix atempo limits
+    if(finalSpeed < 0.5) {
+        finalSpeed = 0.5;
+    }
+    if(finalSpeed > 2) { // This is in really 100, but I prefer silence time than a high speed up
+        finalSpeed = 2;
+    }
 
     await new Promise((resolve, reject) => {
         ffmpeg(temp_file)
@@ -110,7 +118,15 @@ export async function textToSpeech(text, targetDuration) {
 
     const duration_temp = await getDuration(temp_file);
 
-    const finalSpeed = duration_temp / targetDuration;
+    let finalSpeed = duration_temp / targetDuration;
+
+    // Fix atempo limits
+    if(finalSpeed < 0.5) {
+        finalSpeed = 0.5;
+    }
+    if(finalSpeed > 2) { // This is in really 100, but I prefer silence time than a high speed up
+        finalSpeed = 2;
+    }
 
     await new Promise((resolve, reject) => {
         ffmpeg(temp_file)
