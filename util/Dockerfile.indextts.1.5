@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.8.0-cuda12.6-cudnn9-runtime
+FROM pytorch/pytorch:2.8.0-cuda12.9-cudnn9-devel
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 RUN git clone https://github.com/index-tts/index-tts.git --depth 1 . && git reset --hard 9098497272d5803bae46cbaf5154cf2ba48f6866
 
 RUN pip install --no-cache-dir -e .
-RUN pip install --no-cache-dir fastapi uvicorn
+RUN pip install --no-cache-dir fastapi uvicorn deepspeed
 
 # Predownload models
 RUN huggingface-cli download IndexTeam/IndexTTS-1.5 \
