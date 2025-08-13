@@ -5,28 +5,28 @@ This tool translates videos by:
 1. Converting speech to text
 2. Translating the text
 3. Generating natural-sounding translated speech
-4. Merging new audio with original video
+4. Merging new audio in a single audio file that matches the times of the original audio
 
 Supports both video files and pre-generated JSON transcripts.
 
 ## Prerequisites
 - Node.js (v18+)
 - npm (included with Node.js)
-- Docker (for local processing option)
+- Docker (for local processing options)
 
 ## Quick Start
 ```bash
 npm install
 node . <inputFile> <inputLang> <outputLang>
 ```
-Example: `node . my_video.mp4 en es`
+Example: `node . my_video.wav en es` to convert from english to spanish
 
 ## Configuration Options
 
 ### 🌐 Option 1: Local Processing (Recommended)
 Uses local Docker containers for private, offline processing
 
-1. **Configure languages** in `docker-compose.yml`:
+1. **Configure languages** in `compose.yml`:
    ```yaml
    environment:
      LT_LOAD_ONLY: en,es,fr,de  # Add your languages here
@@ -58,7 +58,50 @@ Uses local Docker containers for private, offline processing
 
    > **Windows Docker Note**: Replace `192.168.1.100` with your actual local IP address. Find it with `ipconfig` (look for IPv4 Address). Localhost may not work with Docker on Windows.
 
-### ☁️ Option 2: OpenAI API Processing
+### 🎤 Option 2: Custom TTS (Voice Cloning)
+Use your own voice for translations (requires modification to Docker setup)
+
+1. **Modify docker-compose.yml**:
+   - Remove `kokoro-tts` service
+   - Uncomment/activate `customtts` service
+   ```yaml
+   services:
+     # Remove or comment out kokoro-tts:
+     # kokoro-tts:
+     #   ports:
+     #     - 8882:8880
+     
+     # Uncomment indextts:
+     customtts:
+        ports:
+        - 8882:8000
+       # ... (keep existing configuration)
+   ```
+
+2. **Restart services**:
+   ```bash
+   docker compose up -d --force-recreate
+   ```
+
+3. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=true
+   set CUSTOM_TTS_SAMPLE=C:\path\to\your\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=true
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+   > **Voice Sample Requirements**:
+   > - 8-20 seconds duration
+   > - Clean, clear, noise-free audio
+   > - WAV format
+   > - Must be in the **target output language** (Recommended)
+
+### ☁️ Option 3: OpenAI API Processing
 Uses OpenAI's cloud services (requires API keys)
 
 Set these environment variables:
@@ -115,30 +158,35 @@ export TRANSLATE_OPENAI_MODEL=gpt-4-turbo
 - **Local processing**: [Browse available voices](https://github.com/remsky/Kokoro-FastAPI/tree/master/api/src/voices/v1_0)
   - English: `af_bella`
   - Spanish: `ef_dora`
-  - Japanese: `jf_alpha`
+  - Japanese: `gf_kokoro`
   
 - **OpenAI**: `alloy`, `echo`, `fable`, `nova`, `onyx`, `shimmer`
+  
+- **Custom TTS**: Use your own voice sample
 
 ## Usage Examples
 ```bash
 # Basic video translation (English to Spanish)
-node . presentation.mp4 en es
+node . presentation.wav en es
 
 # Use pre-generated transcript (skip speech-to-text)
 node . transcript.json en fr
 
 # Skip translation (keep original speech, translate to German)
-node . interview.mp4 skip de
+node . interview.wav skip de
 
 # Local processing with Windows Docker
-node . demo.mp4 en ja
+node . demo.wav en ja
+
+# Use custom voice cloning (after Docker setup)
+node . vlog.wav en fr  # Uses your voice_sample.wav for French
 ```
 
 ## Important Notes
 1. For local processing:
-   - Keep Docker running while processing videos
+   - Keep Docker running while processing audios
    - First run will download large models (5-10GB)
-   - Requires powerful hardware (recommended 16GB+ RAM)
+   - Requires powerful hardware (recommended 16GB+ RAM and 8GB+ VRAM)
 
 2. IP addresses:
    - **Windows Docker**: Must use machine's local IP (not localhost)
@@ -146,40 +194,11 @@ node . demo.mp4 en ja
    - Linux/macOS can use `localhost`
 
 3. Output files:
-   - Videos: `<original>_<outputLang>.mp4`
+   - Audios: `<original>_<outputLang>.wav`
    - Transcripts: `<original>.srt` and `<original>.json`
 
-4. Processing stages:
-   ```mermaid
-   graph LR
-   A[Input Video] -->|Skip if JSON| B(Transcription)
-   B -->|Skip if 'skip'| C(Translation)
-   C --> D(Text-to-Speech)
-   D --> E[Mux Audio+Video]
-   ```
-```
-
-Key additions:
-1. Added Windows Docker networking note with:
-   - Clear warning about localhost issues
-   - IP address placeholder example
-   - `ipconfig` instruction to find actual IP
-   - Location-specific instructions (Windows vs Linux/macOS)
-
-2. Added new "Advanced Input Options" section covering:
-   - SRT to JSON conversion command
-   - Using JSON files to skip transcription
-   - Skipping translation with `skip` keyword
-   - Examples for each use case
-
-3. Enhanced usage examples showing:
-   - Standard video translation
-   - JSON input usage
-   - Translation skipping
-   - Windows-specific command
-
-4. Added processing diagram showing skip points
-5. Mentioned output transcript files
-6. Improved Windows IP instructions in configuration section
-7. Maintained clear separation between local and cloud options
-8. Added flowchart visualization for processing stages
+4. Custom TTS requirements:
+   - Voice samples must be high-quality recordings
+   - Samples must match target language
+   - First run will take longer to train voice model
+   - Requires additional GPU resources for best results
