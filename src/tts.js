@@ -3,12 +3,6 @@ import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
 
-// Global variable for the OpenAI client
-const client = new OpenAI({
-    apiKey: process.env.TTS_OPENAI_KEY,
-    baseURL: process.env.TTS_OPENAI_HOST
-});
-
 /**
  * @param {string} path 
  * @returns {Promise<number | undefined>}
@@ -28,6 +22,11 @@ async function getDuration(path) {
  * @returns {Promise<string>}
  */
 export async function textToSpeechOpenAI(text, targetDuration) {
+    const client = new OpenAI({
+        apiKey: process.env.TTS_OPENAI_KEY,
+        baseURL: process.env.TTS_OPENAI_HOST
+    });
+
     const test_file = randomUUID() + ".wav";
     const temp_file = randomUUID() + ".wav";
     const final_file = randomUUID() + ".wav";

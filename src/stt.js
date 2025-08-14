@@ -1,18 +1,17 @@
 import OpenAI from "openai";
 import fs from "fs";
 
-// Global variable for the OpenAI client
-const client = new OpenAI({
-    apiKey: process.env.STT_OPENAI_KEY,
-    baseURL: process.env.STT_OPENAI_HOST
-});
-
 /**
  * Transcribes an audio file using OpenAI Whisper
  * @param {string} audioFilePath - Path to the audio file
  * @returns {Promise<OpenAI.Audio.Transcriptions.TranscriptionVerbose | undefined>} - Transcription with timestamps
  */
 async function whipserTranscribe(audioFilePath) {
+    const client = new OpenAI({
+        apiKey: process.env.STT_OPENAI_KEY,
+        baseURL: process.env.STT_OPENAI_HOST
+    });
+
     try {
         console.log(`Transcribing file: ${audioFilePath}`);
 
