@@ -202,3 +202,7 @@ node . vlog.wav en fr  # Uses your voice_sample.wav for French
    - Samples must match target language
    - First run will take longer to train voice model
    - Requires additional GPU resources for best results
+
+```
+Warning! Any of the audios found in this repository cannot be used for anything other than personal and private use to test the code, non-private and personal use, that is, generating an audio that is uploaded to the internet, shared, sent to someone, even with the purpose of doing harm or not, even if it is just for fun is illegal. You cannot use another person's voices without their consent (in this case my voice), the improper use of their voice will be an infringement of identity theft and can end in serious legal problems, even facing prison sentences of several months or years, this message is only to warn about the use of my voice in this repository and in my YouTube videos, this message also affects previous commits.
+```
