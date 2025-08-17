@@ -203,6 +203,13 @@ node . vlog.wav en fr  # Uses your voice_sample.wav for French
    - First run will take longer to train voice model
    - Requires additional GPU resources for best results
 
+## Other interesting models that could be added:
+### Zero-Shot:
+- https://github.com/k2-fsa/ZipVoice - Good results (Enlgish, Chinese) - Apache-2.0 :D
+- https://github.com/bytedance/MegaTTS3 - Good results (Enlgish, Chinese) - Apache-2.0 :D
+- https://github.com/boson-ai/higgs-audio - Very good results (English, Chinese Only?) (Warning: Very big) - Apache-2.0 :D
+- https://github.com/fishaudio/fish-speech - Very good results (Chinese, English, German, Japanese, French, Spanish, Korean, Arabic, Dutch, Russian, Italian, Polish, Portuguese) - cc-by-nc-sa-4.0 :c
+
 ```
 Warning! Any of the audios found in this repository cannot be used for anything other than personal and private use to test the code, non-private and personal use, that is, generating an audio that is uploaded to the internet, shared, sent to someone, even with the purpose of doing harm or not, even if it is just for fun is illegal. You cannot use another person's voices without their consent (in this case my voice), the improper use of their voice will be an infringement of identity theft and can end in serious legal problems, even facing prison sentences of several months or years, this message is only to warn about the use of my voice in this repository and in my YouTube videos, this message also affects previous commits.
 ```
