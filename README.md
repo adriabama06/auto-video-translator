@@ -86,12 +86,12 @@ Use your own voice for translations (requires modification to Docker setup)
 3. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=true
+   set CUSTOM_TTS=http://192.168.1.100:8882
    set CUSTOM_TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=true
+   export CUSTOM_TTS=http://localhost:8882
    export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
