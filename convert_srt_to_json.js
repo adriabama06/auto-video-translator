@@ -1,4 +1,5 @@
 import fs from "fs";
+import { processSentences } from "./src/stt.js";
 
 const inputFile = process.argv[2];
 
@@ -52,4 +53,10 @@ for(const timestamp of timestamps) {
     parsedTimestamps.push(parseTimeStamp(timestamp));
 }
 
-fs.writeFileSync(inputFile.split('.').slice(0, -1).join('.') + ".json", JSON.stringify(parsedTimestamps, undefined, 4));
+fs.writeFileSync(inputFile.split('.').slice(0, -1).join('.') + ".json",
+    JSON.stringify(
+        processSentences(parsedTimestamps),
+        undefined,
+        4
+    )
+);
