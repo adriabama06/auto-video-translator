@@ -49,7 +49,7 @@ export function processSentences(segments) {
         var accumulation = currentSegment.text.trim();
 
         // It has already end of sequence.
-        if (accumulation.endsWith(".") || i + 1 >= segments.length) {
+        if (accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!") || i + 1 >= segments.length) {
             subtitles.push({
                 start: currentSegment.start,
                 end: currentSegment.end,
@@ -97,7 +97,7 @@ export function processSentences(segments) {
             accumulation += (" " + testSegment.text.trim());
 
             // It has already end of sequence found.
-            if (accumulation.endsWith(".") || j + 1 >= segments.length) {
+            if (accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!") || j + 1 >= segments.length) {
                 subtitles.push({
                     start: currentSegment.start,
                     end: testSegment.end,
