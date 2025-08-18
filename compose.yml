@@ -41,7 +41,7 @@ services:
               count: all
               capabilities:
                 - gpu
-  # customtts: # Note I also want to add MegaTTS 3 (The audio generated is more close to my real voice than indextts, at least in my case, some one want's to contribute? :D)
+  # indextts: # Note I also want to add MegaTTS 3 (The audio generated is more close to my real voice than indextts, at least in my case, some one want's to contribute? :D)
   #   ports:
   #     - 8882:8000
   #   image: adriabama06/indextts
@@ -49,6 +49,8 @@ services:
   #     context: util
   #     dockerfile: Dockerfile.indextts.1.5
   #   restart: always
+  #   volumes:
+  #     - ./checkpoints:/app/checkpoints
   #   healthcheck:
   #     test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
   #     interval: 30s

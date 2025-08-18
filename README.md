@@ -63,7 +63,7 @@ Use your own voice for translations (requires modification to Docker setup)
 
 1. **Modify docker-compose.yml**:
    - Remove `kokoro-tts` service
-   - Uncomment/activate `customtts` service
+   - Uncomment/activate `indextts` service
    ```yaml
    services:
      # Remove or comment out kokoro-tts:
@@ -72,7 +72,7 @@ Use your own voice for translations (requires modification to Docker setup)
      #     - 8882:8880
      
      # Uncomment indextts:
-     customtts:
+     indextts:
         ports:
         - 8882:8000
        # ... (keep existing configuration)
