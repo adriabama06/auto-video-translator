@@ -15,10 +15,13 @@ RUN pip install --no-cache-dir -e .
 RUN pip install --no-cache-dir fastapi uvicorn deepspeed
 
 # Predownload models
-RUN huggingface-cli download IndexTeam/IndexTTS-1.5 \
-  config.yaml bigvgan_discriminator.pth bigvgan_generator.pth bpe.model dvae.pth gpt.pth unigram_12000.vocab \
-  --local-dir checkpoints
+# RUN huggingface-cli download IndexTeam/IndexTTS-1.5 \
+#   config.yaml bigvgan_discriminator.pth bigvgan_generator.pth bpe.model dvae.pth gpt.pth unigram_12000.vocab \
+#   --local-dir checkpoints
+RUN mkdir -p /app/checkpoints
 
 COPY ./app.indextts.1.5.py /app/app.py
+
+VOLUME [ "/app/checkpoints" ]
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
