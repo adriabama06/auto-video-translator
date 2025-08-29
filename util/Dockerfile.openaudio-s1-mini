@@ -1,0 +1,42 @@
+FROM python:3.12-slim-bookworm
+ARG TARGETARCH
+
+ARG DEPENDENCIES="  \
+    ca-certificates \
+    libsox-dev \
+    build-essential \
+    cmake \
+    libasound-dev \
+    portaudio19-dev \
+    libportaudio2 \
+    libportaudiocpp0 \
+    git \
+    ffmpeg"
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    set -ex \
+    && rm -f /etc/apt/apt.conf.d/docker-clean \
+    && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' >/etc/apt/apt.conf.d/keep-cache \
+    && apt-get update \
+    && apt-get -y install --no-install-recommends ${DEPENDENCIES} \
+    && echo "no" | dpkg-reconfigure dash
+
+WORKDIR /opt/fish-speech
+
+RUN rm * -drf && git clone https://github.com/fishaudio/fish-speech.git . && git reset --hard 54458f7cd5d9a0bcfff56f7d4854fa08b421bef6
+
+RUN --mount=type=cache,target=/root/.cache,sharing=locked \
+    set -ex \
+    && pip install -e .[stable]
+
+RUN mkdir -p /opt/fish-speech/checkpoints
+
+ENV CUDA_ENABLED=true
+
+COPY ./entrypoint.openaudio-s1-mini.sh /entrypoint.sh
+
+EXPOSE 6673
+VOLUME [ "/opt/fish-speech/checkpoints" ]
+
+CMD [ "/entrypoint.sh" ]

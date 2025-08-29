@@ -1,6 +1,6 @@
 import { processSentences, transcribeAudio } from "./stt.js";
 import { translateText, translateTextOpenAI } from "./translate.js";
-import { textToSpeech, textToSpeechOpenAI } from "./tts.js";
+import { IndexTTSGenerateAudio, FishSpeechGenerateAudio, textToSpeechOpenAI } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
 
@@ -60,7 +60,21 @@ console.log("Converting text to audio");
 for (const segment of res) {
     const targetTime = segment.end - segment.start;
 
-    const file = process.env.CUSTOM_TTS ? await textToSpeech(segment.text, targetTime) : await textToSpeechOpenAI(segment.text, targetTime);
+    let file = "";
+
+    switch(process.env.CUSTOM_TTS_MODEL) {
+        case "indextts":
+            file = await IndexTTSGenerateAudio(segment.text, targetTime);
+            break;
+
+        case "fishspeech":
+            file = await FishSpeechGenerateAudio(segment.text, targetTime);
+            break;
+
+        default:
+            file = await textToSpeechOpenAI(segment.text, targetTime);
+            break;
+    }
 
     audios.push(file);
 }

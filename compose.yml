@@ -41,30 +41,50 @@ services:
               count: all
               capabilities:
                 - gpu
-  # indextts: # Note I also want to add MegaTTS 3 (The audio generated is more close to my real voice than indextts, at least in my case, some one want's to contribute? :D)
-  #   ports:
-  #     - 8882:8000
-  #   image: adriabama06/indextts
-  #   build:
-  #     context: util
-  #     dockerfile: Dockerfile.indextts.1.5
-  #   restart: always
-  #   volumes:
-  #     - ./checkpoints:/app/checkpoints
-  #   healthcheck:
-  #     test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
-  #     interval: 30s
-  #     timeout: 10s
-  #     retries: 3
-  #     start_period: 5s
-  #   deploy:
-  #     resources:
-  #       reservations:
-  #         devices:
-  #           - driver: nvidia
-  #             count: all
-  #             capabilities:
-  #               - gpu
+  indextts:
+    ports:
+      - 8882:8000
+    image: adriabama06/indextts
+    build:
+      context: util
+      dockerfile: Dockerfile.indextts.1.5
+    restart: always
+    volumes:
+      - ./checkpoints:/app/checkpoints
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+  openaudio-s1-mini:
+    environment:
+      - HF_TOKEN=your_token_here
+    ports:
+      - 8882:6673
+    image: adriabama06/openaudio-s1-mini
+    build:
+      context: util
+      dockerfile: Dockerfile.openaudio-s1-mini
+    restart: always
+    volumes:
+      - ./checkpoints:/opt/fish-speech/checkpoints
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:
