@@ -21,28 +21,131 @@ node . <inputFile> <inputLang> <outputLang>
 ```
 Example: `node . my_video.wav en es` to convert from english to spanish
 
+## Language Support
+> This list may vary depending on the model used. 
+
+| Input Languages (Speech-to-Text) | Output Languages (Text-to-Speech) |
+|----------------------------------|-----------------------------------|
+| [Full list of Whisper v3 languages](https://huggingface.co/openai/whisper-large-v3) | [OpenAudio S1 Mini languages](https://huggingface.co/fishaudio/openaudio-s1-mini) |
+| - English (en)                   | - English (en)                    |
+| - Chinese (zh)                   | - Chinese (zh)                    |
+| - German (de)                    | - Japanese (ja)                   |
+| - Spanish (es)                   | - German (de)                     |
+| - Russian (ru)                   | - French (fr)                     |
+| - Korean (ko)                    | - Spanish (es)                    |
+| - French (fr)                    | - Korean (ko)                     |
+| - Japanese (ja)                  | - Arabic (ar)                     |
+| - Portuguese (pt)                | - Russian (ru)                    |
+| - Turkish (tr)                   | - Dutch (nl)                      |
+| - Polish (pl)                    | - Italian (it)                    |
+| - Catalan (ca)                   | - Polish (pl)                     |
+| - Dutch (nl)                     | - Portuguese (pt)                 |
+| - Arabic (ar)                    |                                   |
+| - Swedish (sv)                   |                                   |
+| - Italian (it)                   |                                   |
+| - Indonesian (id)                |                                   |
+| - Hindi (hi)                     |                                   |
+| - Finnish (fi)                   |                                   |
+| - Vietnamese (vi)                |                                   |
+| - Hebrew (he)                    |                                   |
+| - Ukrainian (uk)                 |                                   |
+| - Greek (el)                     |                                   |
+| - Malay (ms)                     |                                   |
+| - Czech (cs)                     |                                   |
+| - Romanian (ro)                  |                                   |
+| - Danish (da)                    |                                   |
+| - Hungarian (hu)                 |                                   |
+| - Tamil (ta)                     |                                   |
+| - Norwegian (no)                 |                                   |
+| - Thai (th)                      |                                   |
+| - Urdu (ur)                      |                                   |
+| - Croatian (hr)                  |                                   |
+| - Bulgarian (bg)                 |                                   |
+| - Lithuanian (lt)                |                                   |
+| - Latin (la)                     |                                   |
+| - Maori (mi)                     |                                   |
+| - Malayalam (ml)                 |                                   |
+| - Welsh (cy)                     |                                   |
+| - Slovak (sk)                    |                                   |
+| - Telugu (te)                    |                                   |
+| - Persian (fa)                   |                                   |
+| - Latvian (lv)                   |                                   |
+| - Bengali (bn)                   |                                   |
+| - Serbian (sr)                   |                                   |
+| - Azerbaijani (az)               |                                   |
+| - Slovenian (sl)                 |                                   |
+| - Kannada (kn)                   |                                   |
+| - Estonian (et)                  |                                   |
+| - Macedonian (mk)                |                                   |
+| - Breton (br)                    |                                   |
+| - Basque (eu)                    |                                   |
+| - Icelandic (is)                 |                                   |
+| - Armenian (hy)                  |                                   |
+| - Nepali (ne)                    |                                   |
+| - Mongolian (mn)                 |                                   |
+| - Bosnian (bs)                   |                                   |
+| - Kazakh (kk)                    |                                   |
+| - Albanian (sq)                  |                                   |
+| - Swahili (sw)                   |                                   |
+| - Galician (gl)                  |                                   |
+| - Marathi (mr)                   |                                   |
+| - Punjabi (pa)                   |                                   |
+| - Sinhala (si)                   |                                   |
+| - Khmer (km)                     |                                   |
+| - Shona (sn)                     |                                   |
+| - Yoruba (yo)                    |                                   |
+| - Somali (so)                    |                                   |
+| - Afrikaans (af)                 |                                   |
+| - Occitan (oc)                   |                                   |
+| - Georgian (ka)                  |                                   |
+| - Belarusian (be)                |                                   |
+| - Tajik (tg)                     |                                   |
+| - Sindhi (sd)                    |                                   |
+| - Gujarati (gu)                  |                                   |
+| - Amharic (am)                   |                                   |
+| - Yiddish (yi)                   |                                   |
+| - Lao (lo)                       |                                   |
+| - Uzbek (uz)                     |                                   |
+| - Faroese (fo)                   |                                   |
+| - Haitian Creole (ht)            |                                   |
+| - Pashto (ps)                    |                                   |
+| - Turkmen (tk)                   |                                   |
+| - Nynorsk (nn)                   |                                   |
+| - Maltese (mt)                   |                                   |
+| - Sanskrit (sa)                  |                                   |
+| - Luxembourgish (lb)             |                                   |
+| - Burmese (my)                   |                                   |
+| - Tibetan (bo)                   |                                   |
+| - Tagalog (tl)                   |                                   |
+| - Malagasy (mg)                  |                                   |
+| - Assamese (as)                  |                                   |
+| - Tatar (tt)                     |                                   |
+| - Hawaiian (haw)                 |                                   |
+| - Lingala (ln)                   |                                   |
+| - Hausa (ha)                     |                                   |
+| - Bashkir (ba)                   |                                   |
+| - Javanese (jw)                  |                                   |
+| - Sundanese (su)                 |                                   |
+
 ## Configuration Options
 
 ### 🌐 Option 1: Local Processing (Recommended)
 Uses local Docker containers for private, offline processing
 
-1. **Configure languages** in `compose.yml`:
-   ```yaml
-   environment:
-     LT_LOAD_ONLY: en,es,fr,de  # Add your languages here
-   ```
-
-2. **Start services**:
+1. **Start specific services**:
    ```bash
-   docker compose up -d
+   # Start only the services you need
+   docker compose up -d whisper-stt libretranslate kokoro-tts
    ```
 
-3. **Set environment variables**:
+2. **Set environment variables**:
 
    **Windows (CMD/PowerShell)**:
    ```cmd
    :: Use your machine's local IP (not localhost) for Docker on Windows
+   set STT_OPENAI_KEY=-
    set STT_OPENAI_HOST=http://192.168.1.100:8881/v1
+   set TTS_OPENAI_KEY=-
    set TTS_OPENAI_HOST=http://192.168.1.100:8882/v1
    set TTS_OPENAI_VOICE=af_bella
    set RETRANSLATE_HOST=http://192.168.1.100:8883
@@ -50,48 +153,67 @@ Uses local Docker containers for private, offline processing
 
    **Linux/macOS**:
    ```bash
+   export STT_OPENAI_KEY=-
    export STT_OPENAI_HOST=http://localhost:8881/v1
+   export TTS_OPENAI_KEY=-
    export TTS_OPENAI_HOST=http://localhost:8882/v1
    export TTS_OPENAI_VOICE=af_bella
    export RETRANSLATE_HOST=http://localhost:8883
    ```
 
+   > **Important**: Even in local mode, you must set dummy values for both `STT_OPENAI_KEY` and `TTS_OPENAI_KEY`:
+   > - `STT_OPENAI_KEY=-` (dummy value)
+   > - `TTS_OPENAI_KEY=-` (dummy value)
+   > These are required for the tool to work properly in local mode.
+
    > **Windows Docker Note**: Replace `192.168.1.100` with your actual local IP address. Find it with `ipconfig` (look for IPv4 Address). Localhost may not work with Docker on Windows.
 
 ### 🎤 Option 2: Custom TTS (Voice Cloning)
-Use your own voice for translations (requires modification to Docker setup)
+Use your own voice for translations with one of these models:
 
-1. **Modify docker-compose.yml**:
-   - Remove `kokoro-tts` service
-   - Uncomment/activate `indextts` service
-   ```yaml
-   services:
-     # Remove or comment out kokoro-tts:
-     # kokoro-tts:
-     #   ports:
-     #     - 8882:8880
-     
-     # Uncomment indextts:
-     indextts:
-        ports:
-        - 8882:8000
-       # ... (keep existing configuration)
-   ```
+#### IndexTTS
+- Requires: Audio sample only
+- Port: 8882
 
-2. **Restart services**:
+1. **Start services**:
    ```bash
-   docker compose up -d --force-recreate
+   docker compose up -d whisper-stt libretranslate indextts
    ```
 
-3. **Set environment variables**:
+2. **Set environment variables**:
    ```cmd
    :: Windows
    set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_SAMPLE=C:\path\to\your\voice_sample.wav
+   set CUSTOM_TTS_MODEL=indextts
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
    export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=indextts
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+#### Fish-Speech (OpenAudio-S1-Mini)
+- Requires: Audio sample + transcription file
+- Port: 8882
+
+1. **Start services**:
+   ```bash
+   docker compose up -d whisper-stt libretranslate openaudio-s1-mini
+   ```
+
+2. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=http://192.168.1.100:8882
+   set CUSTOM_TTS_MODEL=fishspeech
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=fishspeech
    export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
@@ -100,6 +222,10 @@ Use your own voice for translations (requires modification to Docker setup)
    > - Clean, clear, noise-free audio
    > - WAV format
    > - Must be in the **target output language** (Recommended)
+   > 
+   > **Fish-Speech Additional Requirement**:
+   > - Create a transcription file with the same name as your audio sample but with `.txt` extension
+   > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
 ### ☁️ Option 3: OpenAI API Processing
 Uses OpenAI's cloud services (requires API keys)
@@ -151,7 +277,7 @@ export TRANSLATE_OPENAI_MODEL=gpt-4-turbo
 - **Skip transcription**: Provide JSON file instead of video
 - **Skip translation**: Use `skip` as input language
   ```bash
-  node . input.mp4 skip es  # Keeps original speech, translates to Spanish
+  node . input.wav skip es  # Keeps original speech, translates to Spanish
   ```
 
 ## Voice Selection Guide
