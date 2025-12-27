@@ -8,6 +8,22 @@ import IndexTTSGenerateAudio from "./backends/indextts.js";
 import FishSpeechGenerateAudio from "./backends/fish-speech.js";
 
 /**
+ * @returns {string} Unique name
+ */
+function getRandomName() {
+    const PREFIX = "tts_tmp_";
+    let count = 0;
+
+    const files = fs.readdirSync(".").filter(f => f.startsWith(PREFIX));
+
+    while(files.find(f => f.replace(".wav", '') == `${PREFIX}${count}`)) {
+        count++;
+    }
+
+    return `${PREFIX}${count}`;
+}
+
+/**
  * @param {string} text 
  * @param {number} targetDuration
  * @returns {Promise<string>}
@@ -18,9 +34,11 @@ export async function textToSpeechOpenAI(text, targetDuration) {
         baseURL: process.env.TTS_OPENAI_HOST
     });
 
-    const test_file = randomUUID() + ".wav";
-    const temp_file = randomUUID() + ".wav";
-    const final_file = randomUUID() + ".wav";
+    const randomName = getRandomName();
+
+    const test_file = randomName + "_test_" + ".wav";
+    const temp_file = randomName + "_temp_" + ".wav";
+    const final_file = randomName + ".wav";
 
     let response = await client.audio.speech.create({
         model: "tts-1",
