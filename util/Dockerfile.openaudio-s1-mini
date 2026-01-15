@@ -28,7 +28,7 @@ RUN rm * -drf && git clone https://github.com/fishaudio/fish-speech.git . && git
 
 RUN --mount=type=cache,target=/root/.cache,sharing=locked \
     set -ex \
-    && pip install -e .[stable]
+    && pip install -e .[stable] && pip install torch==2.8.0 torchvision==0.23.0 torchaudio==2.8.0 --index-url https://download.pytorch.org/whl/cu129
 
 RUN mkdir -p /opt/fish-speech/checkpoints
 
