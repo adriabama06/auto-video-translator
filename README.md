@@ -329,6 +329,13 @@ node . vlog.wav en fr  # Uses your voice_sample.wav for French
    - First run will take longer to train voice model
    - Requires additional GPU resources for best results
 
+5. Hardware Compatibility and Requirements:
+   - **This tool has only been tested on Nvidia (CUDA)**: For CPU-only processing, it should work without issues but may be slower.
+   - **AMD GPU users**: Setting up ROCm might be more complex, and some models may not work properly. In such cases, using CPU is recommended.
+   - **VRAM Recommendations**:
+     - For running individual services (e.g., only speech-to-text or text-to-speech), at least **6 GB of VRAM** is recommended.
+     - For running the complete workflow with multiple services simultaneously, at least **10 GB of VRAM** is recommended.
+
 ## Other interesting models that could be added:
 ### Zero-Shot:
 - https://github.com/k2-fsa/ZipVoice - Good results (Enlgish, Chinese) - Apache-2.0 :D
