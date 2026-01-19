@@ -2,6 +2,7 @@ import fs from "fs";
 import { randomUUID } from "crypto";
 import { getDuration } from "./audio.js";
 import ffmpeg from "fluent-ffmpeg";
+import { getRandomName } from "../tts.js";
 
 /**
  * @param {string} text 
@@ -9,8 +10,10 @@ import ffmpeg from "fluent-ffmpeg";
  * @returns {Promise<string>}
  */
 export default async function IndexTTSGenerateAudio(text, targetDuration) {
-    const temp_file = randomUUID() + ".wav";
-    const final_file = randomUUID() + ".wav";
+    const randomName = getRandomName();
+  
+    const temp_file = randomName + "_temp_" + ".wav";
+    const final_file = randomName + ".wav";
 
     const audioBytes = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE);
     const audioBase64 = audioBytes.toString("base64");

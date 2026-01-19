@@ -10,7 +10,7 @@ import FishSpeechGenerateAudio from "./backends/fish-speech.js";
 /**
  * @returns {string} Unique name
  */
-function getRandomName() {
+export function getRandomName() {
     const PREFIX = "tts_tmp_";
     let count = 0;
 

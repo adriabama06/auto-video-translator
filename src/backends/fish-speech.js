@@ -2,6 +2,7 @@ import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
 import { getDuration } from "./audio.js";
+import { getRandomName } from "../tts.js";
 
 /**
  * @typedef {Object} FishSpeechReferenceAudio
@@ -74,8 +75,10 @@ const FishSpeechInference = async (data) => {
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
 export default async function FishSpeechGenerateAudio(text, targetDuration) {
-    const temp_file = randomUUID() + ".wav";
-    const final_file = randomUUID() + ".wav";
+    const randomName = getRandomName();
+
+    const temp_file = randomName + "_temp_" + ".wav";
+    const final_file = randomName + ".wav";
 
     const audioBuffer = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE);
     const audioData = audioBuffer.toString("base64");
