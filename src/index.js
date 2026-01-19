@@ -32,8 +32,6 @@ Example:
     if (inputFile.endsWith("json")) {
         console.log(`Reading ${inputFile}...`);
         res = JSON.parse(fs.readFileSync(inputFile).toString());
-
-        res = processSentences(res);
     } else {
         console.log(`Converting ${inputFile} to text...`);
         res = await transcribeAudio(inputFile);

@@ -31,6 +31,10 @@ async function whipserTranscribe(audioFilePath) {
     }
 }
 
+// Use MIN_WORDS=0 to disable this new algorithm
+const MIN_WORDS = process.env.STT_MIN_WORDS ? parseInt(process.env.STT_MIN_WORDS) : 20;
+const MIN_SPACE = process.env.STT_MIN_SPACE ? parseInt(process.env.STT_MIN_SPACE) : 0.6;
+
 /**
  * Processes segments to form complete sentences
  * @param {OpenAI.Audio.Transcriptions.TranscriptionSegment[]} segments - Transcription segments
@@ -43,13 +47,38 @@ export function processSentences(segments) {
 
     const subtitles = [];
 
+    /**
+     * Helper para decidir si debemos forzar la unión con el siguiente segmento ignorando la puntuación actual.
+     * @param {number} currentEnd - Final del segmento actual (en segundos)
+     * @param {number} nextIdx - Índice del siguiente segmento
+     */
+    const shouldMergeWithNext = (currentEnd, nextIdx) => {
+        if (nextIdx >= segments.length) return false; // No hay siguiente
+
+        const nextSegment = segments[nextIdx];
+        
+        // Calcular tiempo entre final del actual y comienzo del siguiente
+        const timeDiff = nextSegment.start - currentEnd;
+        
+        // Calcular número de palabras del siguiente segmento
+        const wordCount = nextSegment.text.trim().split(/\s+/).length;
+
+        // Condición: Si está cerca Y es corto -> UNIR
+        return (timeDiff <= MIN_SPACE && wordCount < MIN_WORDS);
+    };
+
     for (let i = 0; i < segments.length; i++) {
         const currentSegment = segments[i];
 
         var accumulation = currentSegment.text.trim();
 
+        const hasPunctuation = accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!");
+        const isLastSegment = i + 1 >= segments.length;
+
+        const forceMergeNext = shouldMergeWithNext(currentSegment.end, i + 1);
+
         // It has already end of sequence.
-        if (accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!") || i + 1 >= segments.length) {
+        if (isLastSegment || (hasPunctuation && !forceMergeNext)) {
             subtitles.push({
                 start: currentSegment.start,
                 end: currentSegment.end,
@@ -59,45 +88,25 @@ export function processSentences(segments) {
             continue;
         }
 
-// I will disable this option for now.
-/*
-        if (accumulation.includes("...")) {
-            let [first, ...second] = accumulation.split("...");
-
-            // Join again the rest of the content
-            second = second.join("...");
-
-            const cutAmount = first.length / accumulation.length;
-
-            const cuttedTime = (currentSegment.end - currentSegment.start) * cutAmount;
-
-            const nextSegment = segments[i + 1];
-
-            const delay = nextSegment.start - currentSegment.end;
-
-            currentSegment.end = currentSegment.start + cuttedTime;
-
-            nextSegment.start = currentSegment.end + delay;
-
-            nextSegment.text = second + " " + nextSegment.text;
-
-            subtitles.push({
-                start: currentSegment.start,
-                end: currentSegment.end,
-                text: first + "..."
-            });
-
-            continue;
-        }
-*/
+        let forceMergeNextInLoop = forceMergeNext;
 
         for (let j = i + 1; j < segments.length; j++) {
             const testSegment = segments[j];
 
-            accumulation += (" " + testSegment.text.trim());
+            if(!forceMergeNextInLoop) accumulation += (" " + testSegment.text.trim());
+            else {
+                if(accumulation[accumulation.length - 1] == '.') accumulation = accumulation.substring(0, accumulation.length - 1);
+
+                accumulation += " " + testSegment.text.trim()[0].toLowerCase() + testSegment.text.trim().substring(1);
+            }
+
+            const currentHasPunctuation = accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!");
+            const currentIsLast = j + 1 >= segments.length;
+
+            forceMergeNextInLoop = shouldMergeWithNext(testSegment.end, j + 1);
 
             // It has already end of sequence found.
-            if (accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!") || j + 1 >= segments.length) {
+            if (currentIsLast || (currentHasPunctuation && !forceMergeNextInLoop)) {
                 subtitles.push({
                     start: currentSegment.start,
                     end: testSegment.end,
@@ -108,40 +117,6 @@ export function processSentences(segments) {
 
                 break;
             }
-
-// I will disable this option for now.
-/*
-            if (accumulation.includes("...")) {
-                let [first, ...second] = accumulation.split("...");
-
-                // Join again the rest of the content
-                second = second.join("...");
-
-                const cutAmount = first.length / accumulation.length;
-
-                const cuttedTime = (testSegment.end - currentSegment.start) * cutAmount;
-
-                const nextSegment = segments[j + 1];
-
-                const delay = nextSegment.start - testSegment.end;
-
-                testSegment.end = currentSegment.start + cuttedTime;
-
-                nextSegment.start = testSegment.end + delay;
-
-                nextSegment.text = second + " " + nextSegment.text;
-
-                subtitles.push({
-                    start: currentSegment.start,
-                    end: testSegment.end,
-                    text: first + "..."
-                });
-
-                i = j;
-
-                break;
-            }
-*/
         }
     }
 
