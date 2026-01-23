@@ -1,3 +1,4 @@
+import Qwen3TTSGenerateAudio from "./backends/qwen3-tts.js";
 import { processSentences, transcribeAudio } from "./stt.js";
 import { translateText, translateTextOpenAI } from "./translate.js";
 import { IndexTTSGenerateAudio, FishSpeechGenerateAudio, textToSpeechOpenAI } from "./tts.js";
@@ -68,6 +69,10 @@ Example:
 
             case "fishspeech":
                 file = await FishSpeechGenerateAudio(segment.text, targetTime);
+                break;
+            
+            case "qwen3tts":
+                file = await Qwen3TTSGenerateAudio(segment.text, targetTime, outputLang);
                 break;
 
             default:

@@ -85,6 +85,24 @@ services:
               count: all
               capabilities:
                 - gpu
+  qwen3tts:
+    ports:
+      - 8883:8000
+    image: adriabama06/qwen3tts
+    build:
+      context: util
+      dockerfile: Dockerfile.qwen3tts
+    restart: always
+    volumes:
+      - ./checkpoints:/Qwen3-TTS/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:
