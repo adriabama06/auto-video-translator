@@ -237,6 +237,7 @@ Use your own voice for translations with one of these models:
 - Port: 8882
 - VRAM: ~2 GB less than Fish-Speech
 - Quality: Higher audio quality
+- **Speed Tip**: For faster processing (but a little bit lower quality), you can switch from the **1.7B** model to the **0.6B** model (replace `Qwen3-TTS-12Hz-1.7B-Base` with `Qwen3-TTS-12Hz-0.6B-Base` in `util/entrypoint.qwen3tts.sh`).
 
 1. **Start services**:
    ```bash
