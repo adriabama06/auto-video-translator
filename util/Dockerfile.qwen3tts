@@ -2,7 +2,7 @@ ARG ANACONDA_PYTHON_VERSION=3.12
 
 FROM pytorch/pytorch:2.7.1-cuda12.6-cudnn9-devel
 
-RUN apt-get update -y && apt-get install -y git sox libsox-fmt-all && apt-get clean
+RUN apt-get update -y && DEBIAN_FRONTEND=noninteractive apt-get install -y git sox libsox-fmt-all ffmpeg && apt-get clean
 
 WORKDIR /Qwen3-TTS
 

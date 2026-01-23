@@ -60,10 +60,13 @@ export default async function Qwen3TTSGenerateAudio(text, targetDuration, output
 
     try {
         const audio = await Qwen3TTSInference(audioData, audioText, outputLang, text);
+        
+        if(!audio[0].url || typeof audio[0].url != "string") throw Error("Qwen3-TTS Gradio server has not return a audio url.");
 
-        console.log(audio);
+        const response = await fetch(audio[0].url);
+        const arrayBuffer = await response.arrayBuffer();
 
-        fs.writeFileSync(temp_file, Buffer.from(audio));
+        fs.writeFileSync(temp_file, Buffer.from(arrayBuffer));
 
         const duration_temp = await getDuration(temp_file);
 

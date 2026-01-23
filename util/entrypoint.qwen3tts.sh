@@ -15,4 +15,4 @@ huggingface-cli download Qwen/Qwen3-TTS-12Hz-1.7B-Base --local-dir ./models/Qwen
 # VoiceDesign model
 # qwen-tts-demo ./models/Qwen3-TTS-12Hz-1.7B-VoiceDesign --ip 0.0.0.0 --port 8000
 # Base model
-qwen-tts-demo ./models/Qwen3-TTS-12Hz-1.7B-Base --ip 0.0.0.0 --port 8000 --temperature 0 --subtalker-temperature 0
+qwen-tts-demo ./models/Qwen3-TTS-12Hz-1.7B-Base --ip 0.0.0.0 --port 8000 --temperature 0.01 --subtalker-temperature 0.01

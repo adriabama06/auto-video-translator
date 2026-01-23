@@ -87,7 +87,7 @@ services:
                 - gpu
   qwen3tts:
     ports:
-      - 8883:8000
+      - 8882:8000
     image: adriabama06/qwen3tts
     build:
       context: util
