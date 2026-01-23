@@ -1,6 +1,9 @@
 # Auto Video Translator 🎥🔊
 **Change video languages using AI like YouTube - completely local or with OpenAI APIs**
 
+## New model: Qwen3-TTS for voice cloning! Better quality and lower VRAM usage than Fish-Speech!
+[Click here to see Qwen3-TTS voice cloning instructions](#qwen3-tts-new)
+
 This tool translates videos by:
 1. Converting speech to text
 2. Translating the text
@@ -224,6 +227,43 @@ Use your own voice for translations with one of these models:
    > - Must be in the **target output language** (Recommended)
    > 
    > **Fish-Speech Additional Requirement**:
+   > - Create a transcription file with the same name as your audio sample but with `.txt` extension
+   > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
+
+#### ⭐ Qwen3-TTS (NEW!)
+**Voice cloning with improved quality and lower VRAM usage** — Uses the same voice cloning approach as Fish-Speech but with better audio quality and approximately 1-2 GB less VRAM consumption. Note: Processing is slower than Fish-Speech but produces higher quality output.
+
+- Requires: Audio sample + transcription file
+- Port: 8882
+- VRAM: ~2 GB less than Fish-Speech
+- Quality: Higher audio quality
+
+1. **Start services**:
+   ```bash
+   docker compose up -d whisper-stt libretranslate qwen3tts
+   ```
+
+2. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=http://192.168.1.100:8882
+   set CUSTOM_TTS_MODEL=qwen3tts
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=qwen3tts
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+   > **Voice Sample Requirements**:
+   > - 10-20 seconds duration (Max 60s)
+   > - Clean, clear, noise-free audio
+   > - WAV format
+   > - If possible be in the **target output language** (Recommended)
+   > 
+   > **Qwen3-TTS Additional Requirement**:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
