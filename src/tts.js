@@ -7,11 +7,25 @@ import { getDuration } from "./backends/audio.js";
 import IndexTTSGenerateAudio from "./backends/indextts.js";
 import FishSpeechGenerateAudio from "./backends/fish-speech.js";
 
+let WORKFLOW_ID = randomUUID().substring(0, 2);
+while(fs.readdirSync(".").find(f => f.startsWith(`tts_tmp_${WORKFLOW_ID}_`))) {
+    WORKFLOW_ID = randomUUID().substring(0, 2);
+}
+fs.writeFileSync("tts_tmp_" + WORKFLOW_ID + "_init", "");
+
+process.on("exit", () => {
+    const files = fs.readdirSync(".").filter(f => f.startsWith(`tts_tmp_${WORKFLOW_ID}_`));
+    for(const file of files) {
+        fs.unlinkSync(file);
+    }
+});
+
+
 /**
  * @returns {string} Unique name
  */
 export function getRandomName() {
-    const PREFIX = "tts_tmp_";
+    const PREFIX = `tts_tmp_${WORKFLOW_ID}_`;
     let count = 0;
 
     const files = fs.readdirSync(".").filter(f => f.startsWith(PREFIX));
