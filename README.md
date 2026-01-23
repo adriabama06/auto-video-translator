@@ -2,7 +2,7 @@
 **Change video languages using AI like YouTube - completely local or with OpenAI APIs**
 
 ## New model: Qwen3-TTS for voice cloning! Better quality and lower VRAM usage than Fish-Speech!
-[Click here to see Qwen3-TTS voice cloning instructions](#qwen3-tts-new)
+[Click here to see Qwen3-TTS voice cloning instructions](#-qwen3-tts-new)
 
 This tool translates videos by:
 1. Converting speech to text
