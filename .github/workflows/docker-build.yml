@@ -1,0 +1,54 @@
+name: Docker Build and Push
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - service: indextts
+            image: auto-video-translator-indextts
+            context: util
+            dockerfile: Dockerfile.indextts.1.5
+          - service: openaudio-s1-mini
+            image: auto-video-translator-openaudio-s1-mini
+            context: util
+            dockerfile: Dockerfile.openaudio-s1-mini
+          - service: qwen3tts
+            image: auto-video-translator-qwen3tts
+            context: util
+            dockerfile: Dockerfile.qwen3tts
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/${{ matrix.dockerfile }}
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.image }}:latest

@@ -7,7 +7,7 @@ services:
     volumes:
       - ./model_aliases.turbo.json:/home/ubuntu/speaches/model_aliases.json
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -28,7 +28,7 @@ services:
     environment:
       - DOWNLOAD_MODEL=true
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8880/health"]
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8880/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -44,7 +44,7 @@ services:
   indextts:
     ports:
       - 8882:8000
-    image: adriabama06/indextts
+    image: ghcr.io/adriabama06/auto-video-translator-indextts:latest
     build:
       context: util
       dockerfile: Dockerfile.indextts.1.5
@@ -52,7 +52,7 @@ services:
     volumes:
       - ./checkpoints:/app/checkpoints
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://0.0.0.0:8000/health"]
+      test: [ "CMD", "curl", "--fail", "http://0.0.0.0:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -70,7 +70,7 @@ services:
       - HF_TOKEN=your_token_here
     ports:
       - 8882:6673
-    image: adriabama06/openaudio-s1-mini
+    image: ghcr.io/adriabama06/auto-video-translator-openaudio-s1-mini:latest
     build:
       context: util
       dockerfile: Dockerfile.openaudio-s1-mini
@@ -88,7 +88,7 @@ services:
   qwen3tts:
     ports:
       - 8882:8000
-    image: adriabama06/qwen3tts
+    image: ghcr.io/adriabama06/auto-video-translator-qwen3tts:latest
     build:
       context: util
       dockerfile: Dockerfile.qwen3tts
@@ -113,7 +113,7 @@ services:
     tty: true
     restart: always
     healthcheck:
-      test: ['CMD-SHELL', './venv/bin/python scripts/healthcheck.py']
+      test: [ 'CMD-SHELL', './venv/bin/python scripts/healthcheck.py' ]
       interval: 10s
       timeout: 4s
       retries: 4
