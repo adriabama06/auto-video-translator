@@ -44,7 +44,7 @@ services:
   indextts:
     ports:
       - 8882:8000
-    image: ghcr.io/adriabama06/auto-video-translator-indextts:latest
+    image: adriabama06/auto-video-translator-indextts:latest
     build:
       context: util
       dockerfile: Dockerfile.indextts.1.5
@@ -70,7 +70,7 @@ services:
       - HF_TOKEN=your_token_here
     ports:
       - 8882:6673
-    image: ghcr.io/adriabama06/auto-video-translator-openaudio-s1-mini:latest
+    image: adriabama06/auto-video-translator-openaudio-s1-mini:latest
     build:
       context: util
       dockerfile: Dockerfile.openaudio-s1-mini
@@ -88,7 +88,7 @@ services:
   qwen3tts:
     ports:
       - 8882:8000
-    image: ghcr.io/adriabama06/auto-video-translator-qwen3tts:latest
+    image: adriabama06/auto-video-translator-qwen3tts:latest
     build:
       context: util
       dockerfile: Dockerfile.qwen3tts
