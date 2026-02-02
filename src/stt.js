@@ -33,6 +33,7 @@ async function whipserTranscribe(audioFilePath) {
 
 // Use MIN_WORDS=0 to disable this new algorithm
 const MIN_WORDS = process.env.STT_MIN_WORDS ? parseInt(process.env.STT_MIN_WORDS) : 20;
+// Use MAX_WORDS=999999 to disable this new algorithm
 const MAX_WORDS = process.env.STT_MAX_WORDS ? parseInt(process.env.STT_MAX_WORDS) : 80;
 const MIN_SPACE = process.env.STT_MIN_SPACE ? parseInt(process.env.STT_MIN_SPACE) : 0.6;
 
