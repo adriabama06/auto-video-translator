@@ -38,6 +38,8 @@ COPY ./entrypoint.openaudio-s1-mini.sh /entrypoint.sh
 
 RUN dos2unix /entrypoint.sh
 
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 6673
 VOLUME [ "/opt/fish-speech/checkpoints" ]
 
