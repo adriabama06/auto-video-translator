@@ -69,4 +69,4 @@ jobs:
           context: ${{ matrix.context }}
           file: ${{ matrix.context }}/${{ matrix.dockerfile }}
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.image }}:latest
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ matrix.image }}:latest
