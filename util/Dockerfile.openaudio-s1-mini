@@ -19,7 +19,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && rm -f /etc/apt/apt.conf.d/docker-clean \
     && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' >/etc/apt/apt.conf.d/keep-cache \
     && apt-get update \
-    && apt-get -y install --no-install-recommends ${DEPENDENCIES} \
+    && apt-get -y install --no-install-recommends dos2unix ${DEPENDENCIES} \
     && echo "no" | dpkg-reconfigure dash
 
 WORKDIR /opt/fish-speech
@@ -35,6 +35,8 @@ RUN mkdir -p /opt/fish-speech/checkpoints
 ENV CUDA_ENABLED=true
 
 COPY ./entrypoint.openaudio-s1-mini.sh /entrypoint.sh
+
+RUN dos2unix /entrypoint.sh
 
 EXPOSE 6673
 VOLUME [ "/opt/fish-speech/checkpoints" ]
