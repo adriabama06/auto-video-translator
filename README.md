@@ -143,7 +143,7 @@ Uses local Docker containers for private, offline processing
 
 2. **Set environment variables**:
 
-   **Windows (CMD/PowerShell)**:
+   **Windows (CMD)**:
    ```cmd
    :: Use your machine's local IP (not localhost) for Docker on Windows
    set STT_OPENAI_KEY=-
@@ -350,27 +350,30 @@ node . vlog.wav en fr  # Uses your voice_sample.wav for French
 ```
 
 ## Important Notes
+1. Windows:
+   - I recommend using CMD over PowerShell; PowerShell requires different commands to set environment variables.
+
 1. For local processing:
    - Keep Docker running while processing audios
    - First run will download large models (5-10GB)
    - Requires powerful hardware (recommended 16GB+ RAM and 8GB+ VRAM)
 
-2. IP addresses:
+1. IP addresses:
    - **Windows Docker**: Must use machine's local IP (not localhost)
    - Find Windows IP: Run `ipconfig` → "IPv4 Address"
    - Linux/macOS can use `localhost`
 
-3. Output files:
+1. Output files:
    - Audios: `<original>_<outputLang>.wav`
    - Transcripts: `<original>.srt` and `<original>.json`
 
-4. Custom TTS requirements:
+1. Custom TTS requirements:
    - Voice samples must be high-quality recordings
    - Samples must match target language
    - First run will take longer to train voice model
    - Requires additional GPU resources for best results
 
-5. Hardware Compatibility and Requirements:
+1. Hardware Compatibility and Requirements:
    - **This tool has only been tested on Nvidia (CUDA)**: For CPU-only processing, it should work without issues but may be slower.
    - **AMD GPU users**: Setting up ROCm might be more complex, and some models may not work properly. In such cases, using CPU is recommended.
    - **VRAM Recommendations**:
