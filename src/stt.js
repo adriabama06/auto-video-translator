@@ -33,6 +33,7 @@ async function whipserTranscribe(audioFilePath) {
 
 // Use MIN_WORDS=0 to disable this new algorithm
 const MIN_WORDS = process.env.STT_MIN_WORDS ? parseInt(process.env.STT_MIN_WORDS) : 20;
+const MAX_WORDS = process.env.STT_MAX_WORDS ? parseInt(process.env.STT_MAX_WORDS) : 80;
 const MIN_SPACE = process.env.STT_MIN_SPACE ? parseInt(process.env.STT_MIN_SPACE) : 0.6;
 
 /**
@@ -56,10 +57,10 @@ export function processSentences(segments) {
         if (nextIdx >= segments.length) return false; // No hay siguiente
 
         const nextSegment = segments[nextIdx];
-        
+
         // Calcular tiempo entre final del actual y comienzo del siguiente
         const timeDiff = nextSegment.start - currentEnd;
-        
+
         // Calcular número de palabras del siguiente segmento
         const wordCount = nextSegment.text.trim().split(/\s+/).length;
 
@@ -93,20 +94,21 @@ export function processSentences(segments) {
         for (let j = i + 1; j < segments.length; j++) {
             const testSegment = segments[j];
 
-            if(!forceMergeNextInLoop) accumulation += (" " + testSegment.text.trim());
+            if (!forceMergeNextInLoop) accumulation += (" " + testSegment.text.trim());
             else {
-                if(accumulation[accumulation.length - 1] == '.') accumulation = accumulation.substring(0, accumulation.length - 1);
+                if (accumulation[accumulation.length - 1] == '.') accumulation = accumulation.substring(0, accumulation.length - 1);
 
                 accumulation += " " + testSegment.text.trim()[0].toLowerCase() + testSegment.text.trim().substring(1);
             }
 
             const currentHasPunctuation = accumulation.endsWith(".") || accumulation.endsWith("?") || accumulation.endsWith("!");
             const currentIsLast = j + 1 >= segments.length;
+            const wordsCount = accumulation.trim().split(/\s+/).length;
 
             forceMergeNextInLoop = shouldMergeWithNext(testSegment.end, j + 1);
 
             // It has already end of sequence found.
-            if (currentIsLast || (currentHasPunctuation && !forceMergeNextInLoop)) {
+            if (currentIsLast || (currentHasPunctuation && !forceMergeNextInLoop) || wordsCount >= MAX_WORDS) {
                 subtitles.push({
                     start: currentSegment.start,
                     end: testSegment.end,
