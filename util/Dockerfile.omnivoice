@@ -1,0 +1,27 @@
+FROM python:3.11-slim-bookworm
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    ffmpeg \
+    libsndfile1 \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+RUN pip install --no-cache-dir uv
+
+# Set working directory
+WORKDIR /app
+
+# Step 1: Install PyTorch
+RUN uv pip install --system --no-cache torch==2.8.0+cu128 torchaudio==2.8.0+cu128 --extra-index-url https://download.pytorch.org/whl/cu128
+
+# Step 2: Install OmniVoice
+RUN uv pip install --system --no-cache git+https://github.com/k2-fsa/OmniVoice.git@346bb75330980a236540d61a0808d00767c0973b
+
+# Expose the application port
+EXPOSE 8001
+
+# Run the OmniVoice demo
+CMD ["omnivoice-demo", "--ip", "0.0.0.0", "--port", "8001", "--no-asr"]

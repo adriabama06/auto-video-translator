@@ -20,6 +20,7 @@ services:
               count: all
               capabilities:
                 - gpu
+
   kokoro-tts:
     ports:
       - 8882:8880
@@ -41,6 +42,7 @@ services:
               count: all
               capabilities:
                 - gpu
+
   indextts:
     ports:
       - 8882:8000
@@ -65,6 +67,7 @@ services:
               count: all
               capabilities:
                 - gpu
+
   openaudio-s1-mini:
     environment:
       - HF_TOKEN=your_token_here
@@ -85,6 +88,7 @@ services:
               count: all
               capabilities:
                 - gpu
+
   qwen3tts:
     ports:
       - 8882:8000
@@ -103,6 +107,26 @@ services:
               count: all
               capabilities:
                 - gpu
+
+  omnivoice:
+    ports:
+      - 8882:8001
+    image: adriabama06/auto-video-translator-omnivoice:latest
+    build:
+      context: util
+      dockerfile: Dockerfile.omnivoice
+    restart: always
+    volumes:
+      - ./checkpoints:/root/.cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:

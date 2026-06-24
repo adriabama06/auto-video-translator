@@ -28,6 +28,10 @@ jobs:
             image: auto-video-translator-qwen3tts
             context: util
             dockerfile: Dockerfile.qwen3tts
+          - service: omnivoice
+            image: auto-video-translator-omnivoice
+            context: util
+            dockerfile: Dockerfile.omnivoice
 
     steps:
       - name: Checkout repository
