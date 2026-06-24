@@ -1,6 +1,7 @@
 # Custom
 *.bin
-checkpoints
+checkpoints/*
+!checkpoints/.gitkeep
 
 # Logs
 logs

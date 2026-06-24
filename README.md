@@ -1,8 +1,8 @@
 # Auto Video Translator 🎥🔊
 **Change video languages using AI like YouTube - completely local or with OpenAI APIs**
 
-## New model: Qwen3-TTS for voice cloning! Better quality and lower VRAM usage than Fish-Speech!
-[Click here to see Qwen3-TTS voice cloning instructions](#-qwen3-tts-new)
+## New model: OmniVoice for voice cloning! Optimized VRAM usage and great quality!
+[Click here to see OmniVoice voice cloning instructions](#%EF%B8%8F-omnivoice-new)
 
 This tool translates videos by:
 1. Converting speech to text
@@ -27,6 +27,8 @@ Example: `node . my_video.wav en es` to convert from english to spanish
 ## Language Support
 > This list may vary depending on the model used. 
 
+
+## Note now, output are the same as input thanks to OmniVoice!!!
 | Input Languages (Speech-to-Text) | Output Languages (Text-to-Speech) |
 |----------------------------------|-----------------------------------|
 | [Full list of Whisper v3 languages](https://huggingface.co/openai/whisper-large-v3) | [OpenAudio S1 Mini languages](https://huggingface.co/fishaudio/openaudio-s1-mini) |
@@ -265,6 +267,45 @@ Use your own voice for translations with one of these models:
    > - If possible be in the **target output language** (Recommended)
    > 
    > **Qwen3-TTS Additional Requirement**:
+   > - Create a transcription file with the same name as your audio sample but with `.txt` extension
+   > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
+
+#### ⭐ OmniVoice (NEW!)
+**Voice cloning with optimized VRAM usage** — Uses the same voice cloning approach as Qwen3-TTS with a more efficient model. Base VRAM usage is approximately 2.1 GB, making it suitable for GPUs with limited VRAM.
+
+- Requires: Audio sample + transcription file
+- Port: 8882
+- Base VRAM: ~2.1 GB
+- VRAM per second of input: ~0.3 GB/s
+- Example: 16s of reference voice input uses of extra ~5 GB VRAM (7.1 GB of VRAM in total)
+- **RTX 3080 10GB**: Maximum recommended reference audio is 16s (7.1 GB VRAM usage fits within 10GB)
+
+1. **Start services**:
+   ```bash
+   docker compose up -d whisper-stt libretranslate omnivoice
+   ```
+
+2. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=http://192.168.1.100:8882
+   set CUSTOM_TTS_MODEL=omnivoice
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=omnivoice
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+   > **Voice Sample Requirements**:
+   > - 5-20 seconds duration (recommended 5s to <20s)
+   > - Clean, clear, noise-free audio
+   > - WAV format
+   > - If possible be in the **target output language** (Recommended)
+   > 
+   > **OmniVoice Additional Requirement**:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
