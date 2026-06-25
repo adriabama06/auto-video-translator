@@ -3,7 +3,6 @@ services:
     ports:
       - 8881:8000
     image: ghcr.io/speaches-ai/speaches:latest-cuda-12.6.3
-    restart: always
     volumes:
       - ./model_aliases.turbo.json:/home/ubuntu/speaches/model_aliases.json
     healthcheck:
@@ -25,7 +24,6 @@ services:
     ports:
       - 8882:8880
     image: ghcr.io/remsky/kokoro-fastapi-gpu:v0.2.1
-    restart: always
     environment:
       - DOWNLOAD_MODEL=true
     healthcheck:
@@ -50,7 +48,6 @@ services:
     build:
       context: util
       dockerfile: Dockerfile.indextts.1.5
-    restart: always
     volumes:
       - ./checkpoints:/app/checkpoints
     healthcheck:
@@ -77,7 +74,6 @@ services:
     build:
       context: util
       dockerfile: Dockerfile.openaudio-s1-mini
-    restart: always
     volumes:
       - ./checkpoints:/opt/fish-speech/checkpoints
     deploy:
@@ -96,7 +92,6 @@ services:
     build:
       context: util
       dockerfile: Dockerfile.qwen3tts
-    restart: always
     volumes:
       - ./checkpoints:/Qwen3-TTS/models
     deploy:
@@ -115,7 +110,6 @@ services:
     build:
       context: util
       dockerfile: Dockerfile.omnivoice
-    restart: always
     volumes:
       - ./checkpoints:/root/.cache
     deploy:
@@ -130,10 +124,9 @@ services:
   voxcpm2:
     ports:
       - 8882:8000
-    image: vllm/vllm-omni:v0.23.0
-    command: vllm serve openbmb/VoxCPM2 --omni --port 8000
+    image: vllm/vllm-omni:v0.22.0
+    command: bash -c "pip install voxcpm && vllm serve openbmb/VoxCPM2 --omni --port 8000 --gpu-memory-utilization 0.7"
     ipc: host
-    restart: always
     volumes:
       - ./checkpoints/huggingface:/root/.cache/huggingface
     deploy:
@@ -153,7 +146,6 @@ services:
       - LT_UPDATE_MODELS=true
       - LT_LOAD_ONLY=en,es
     tty: true
-    restart: always
     healthcheck:
       test: [ 'CMD-SHELL', './venv/bin/python scripts/healthcheck.py' ]
       interval: 10s

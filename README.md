@@ -1,8 +1,16 @@
 # Auto Video Translator 🎥🔊
 **Change video languages using AI like YouTube - completely local or with OpenAI APIs**
 
-## New model: OmniVoice for voice cloning! Optimized VRAM usage and great quality!
-[Click here to see OmniVoice voice cloning instructions](#%EF%B8%8F-omnivoice-new)
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Local Processing (Recommended)](#-option-1-local-processing-recommended)
+- [Custom TTS (Voice Cloning)](#-option-2-custom-tts-voice-cloning)
+  - [IndexTTS](#indextts)
+  - [Fish-Speech](#fish-speech-openaudio-s1-mini)
+  - [Qwen3-TTS](#-qwen3-tts)
+  - [OmniVoice](#-omnivoice)
+  - [VoxCPM2](#-voxcpm2)
+- [OpenAI API Processing](#-option-3-openai-api-processing)
 
 This tool translates videos by:
 1. Converting speech to text
@@ -28,7 +36,8 @@ Example: `node . my_video.wav en es` to convert from english to spanish
 > This list may vary depending on the model used. 
 
 
-## Note now, output are the same as input thanks to OmniVoice!!!
+## Note: Now, output are the same as input thanks to OmniVoice!!!
+# It means that the output languages are the same as input languages
 | Input Languages (Speech-to-Text) | Output Languages (Text-to-Speech) |
 |----------------------------------|-----------------------------------|
 | [Full list of Whisper v3 languages](https://huggingface.co/openai/whisper-large-v3) | [OpenAudio S1 Mini languages](https://huggingface.co/fishaudio/openaudio-s1-mini) |
@@ -232,7 +241,7 @@ Use your own voice for translations with one of these models:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
-#### ⭐ Qwen3-TTS (NEW!)
+#### ⭐ Qwen3-TTS
 **Voice cloning with improved quality and lower VRAM usage** — Uses the same voice cloning approach as Fish-Speech but with better audio quality and approximately 1-2 GB less VRAM consumption. Note: Processing is slower than Fish-Speech but produces higher quality output.
 
 - Requires: Audio sample + transcription file
@@ -270,7 +279,7 @@ Use your own voice for translations with one of these models:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
-#### ⭐ OmniVoice (NEW!)
+#### ⭐ OmniVoice
 **Voice cloning with optimized VRAM usage** — Uses the same voice cloning approach as Qwen3-TTS with a more efficient model. Base VRAM usage is approximately 2.1 GB, making it suitable for GPUs with limited VRAM.
 
 - Requires: Audio sample + transcription file
@@ -306,6 +315,43 @@ Use your own voice for translations with one of these models:
    > - If possible be in the **target output language** (Recommended)
    > 
    > **OmniVoice Additional Requirement**:
+   > - Create a transcription file with the same name as your audio sample but with `.txt` extension
+   > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
+
+#### ⭐ VoxCPM2
+**Voice cloning with support for multiple languages** — Similar to Qwen3-TTS and OmniVoice in terms of setup and usage.
+
+- Requires: Audio sample + transcription file
+- Port: 8882
+- **Important**: Maximum input audio duration is **30 seconds**. Do not exceed this limit.
+- **Memory Error Solution**: If you encounter memory errors when running VoxCPM2, try increasing `--gpu-memory-utilization` in the Docker Compose file.
+
+1. **Start services**:
+   ```bash
+   docker compose up -d whisper-stt libretranslate voxcpm2
+   ```
+
+2. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=http://192.168.1.100:8882
+   set CUSTOM_TTS_MODEL=voxcpm2
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=voxcpm2
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+   > **Voice Sample Requirements**:
+   > - Maximum 30 seconds duration (shorter is recommended)
+   > - Clean, clear, noise-free audio
+   > - WAV format
+   > - If possible be in the **target output language** (Recommended)
+   > 
+   > **VoxCPM2 Additional Requirement**:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 

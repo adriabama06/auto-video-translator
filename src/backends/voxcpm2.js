@@ -12,9 +12,9 @@ const VoxCPM2Inference = async (ref, ref_text, text) => {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            model: "voxcpm2",
+            model: "openbmb/VoxCPM2",
             input: text,
-            voice: "default", // OpenAI Requires this (eventhough if not used)
+            voice: "default", // OpenAI Requires this (eventhough is not used)
             response_format: "wav",
             ref_audio: ref,
             ref_text: ref_text
@@ -43,7 +43,8 @@ export default async function VoxCPM2GenerateAudio(text, targetDuration, outputL
     const final_file = randomName + ".wav";
 
     const audioBuffer = await readFile(process.env.CUSTOM_TTS_SAMPLE);
-    const audioData = new Blob([audioBuffer], { type: "audio/wav" });
+    const audioBase64 = audioBuffer.toString("base64");
+    const refAudioDataUrl = `data:audio/wav;base64,${audioBase64}`;
 
     if(!fs.existsSync(process.env.CUSTOM_TTS_SAMPLE + ".txt")) {
         console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
@@ -53,7 +54,7 @@ export default async function VoxCPM2GenerateAudio(text, targetDuration, outputL
     const audioText = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE + ".txt", "utf-8").toString();
 
     try {
-        const arrayBuffer = await VoxCPM2Inference(audioData, audioText, text);
+        const arrayBuffer = await VoxCPM2Inference(refAudioDataUrl, audioText, text);
 
         fs.writeFileSync(temp_file, Buffer.from(arrayBuffer));
 
