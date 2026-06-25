@@ -1,7 +1,7 @@
 import Qwen3TTSGenerateAudio from "./backends/qwen3-tts.js";
 import { processSentences, transcribeAudio } from "./stt.js";
 import { translateText, translateTextOpenAI } from "./translate.js";
-import { IndexTTSGenerateAudio, FishSpeechGenerateAudio, textToSpeechOpenAI, OmniVoiceGenerateAudio } from "./tts.js";
+import { IndexTTSGenerateAudio, FishSpeechGenerateAudio, textToSpeechOpenAI, OmniVoiceGenerateAudio, VoxCPM2GenerateAudio } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
 
@@ -77,6 +77,10 @@ Example:
 
             case "omnivoice":
                 file = await OmniVoiceGenerateAudio(segment.text, targetTime, outputLang);
+                break;
+
+            case "voxcpm2":
+                file = await VoxCPM2GenerateAudio(segment.text, targetTime, outputLang);
                 break;
 
             default:

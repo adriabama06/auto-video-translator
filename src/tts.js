@@ -7,6 +7,7 @@ import { getDuration } from "./backends/audio.js";
 import IndexTTSGenerateAudio from "./backends/indextts.js";
 import FishSpeechGenerateAudio from "./backends/fish-speech.js";
 import OmniVoiceGenerateAudio from "./backends/omnivoice.js";
+import VoxCPM2GenerateAudio from "./backends/voxcpm2.js";
 
 let WORKFLOW_ID = randomUUID().substring(0, 2);
 while(fs.readdirSync(".").find(f => f.startsWith(`WF_${WORKFLOW_ID}`))) {
@@ -101,5 +102,6 @@ export async function textToSpeechOpenAI(text, targetDuration) {
 export {
     IndexTTSGenerateAudio,
     FishSpeechGenerateAudio,
-    OmniVoiceGenerateAudio
+    OmniVoiceGenerateAudio,
+    VoxCPM2GenerateAudio
 };

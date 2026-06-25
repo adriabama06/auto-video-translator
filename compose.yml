@@ -126,6 +126,24 @@ services:
               count: all
               capabilities:
                 - gpu
+  
+  voxcpm2:
+    ports:
+      - 8882:8000
+    image: vllm/vllm-omni:v0.23.0
+    command: vllm serve openbmb/VoxCPM2 --omni --port 8000
+    ipc: host
+    restart: always
+    volumes:
+      - ./checkpoints/huggingface:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
 
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda

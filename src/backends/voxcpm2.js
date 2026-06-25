@@ -1,56 +1,42 @@
 import { getRandomName } from "../tts.js";
-import { Client } from "@gradio/client";
 import { readFile } from "fs/promises";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { getDuration } from "./audio.js";
 
-let client = null;
-
-/**
- * Makes an inference request to the OmniVoice Gradio API
- * NOTE: MORE LANGUAGES MUST BE ADDED OR USE AUTO MODE
- * Auto mode menas that outputLang is "Auto"
- */
-const OmniVoiceInference = async (ref, ref_text, outputLang, text, targetDuration) => {
-    if(outputLang == "en") outputLang = "English";
-    if(outputLang == "zh") outputLang = "Chinese";
-    if(outputLang == "jp") outputLang = "Japanese";
-    if(outputLang == "kr") outputLang = "Korean";
-    if(outputLang == "de") outputLang = "German";
-    if(outputLang == "fr") outputLang = "French";
-    if(outputLang == "ru") outputLang = "Russian";
-    if(outputLang == "pt") outputLang = "Portuguese";
-    if(outputLang == "es") outputLang = "Spanish";
-    if(outputLang == "it") outputLang = "Italian";
-
-    if(client == null) client = await Client.connect(process.env.CUSTOM_TTS);
-    const result = await client.predict("/_clone_fn", {
-		text: text,
-		lang: outputLang,
-		ref_aud: ref,
-		ref_text: ref_text,
-		instruct: "",
-		ns: 32,
-		gs: 2.0,
-		dn: true,
-		sp: 1.0,
-		du: targetDuration, // 0 to disable
-		pp: true,
-		po: true
+const VoxCPM2Inference = async (ref, ref_text, text) => {
+    const response = await fetch(`${process.env.CUSTOM_TTS}/v1/audio/speech`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${process.env.TTS_OPENAI_KEY ?? "-"}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            model: "voxcpm2",
+            input: text,
+            voice: "default", // OpenAI Requires this (eventhough if not used)
+            response_format: "wav",
+            ref_audio: ref,
+            ref_text: ref_text
+        })
     });
 
-    return result.data;
+    if (!response.ok) {
+        console.log(await response.text());
+        process.exit(0);
+    }
+
+    return await response.arrayBuffer();
 };
 
 /**
- * Generates audio using OmniVoice with voice cloning
+ * Generates audio using VoxCPM2 via vLLM-Omni with voice cloning
  * @param {string} text - Text to synthesize
  * @param {number} targetDuration - Target duration for the audio
  * @param {string} outputLang - Target duration for the audio
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
-export default async function OmniVoiceGenerateAudio(text, targetDuration, outputLang) {
+export default async function VoxCPM2GenerateAudio(text, targetDuration, outputLang) {
     const randomName = getRandomName();
 
     const temp_file = randomName + "_temp_" + ".wav";
@@ -60,19 +46,14 @@ export default async function OmniVoiceGenerateAudio(text, targetDuration, outpu
     const audioData = new Blob([audioBuffer], { type: "audio/wav" });
 
     if(!fs.existsSync(process.env.CUSTOM_TTS_SAMPLE + ".txt")) {
-        console.log(`[ERROR] OmniVoice requires a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+        console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
     const audioText = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE + ".txt", "utf-8").toString();
 
     try {
-        const audio = await OmniVoiceInference(audioData, audioText, outputLang, text, targetDuration);
-        
-        if(!audio[0].url || typeof audio[0].url != "string" || audio[1] != "Done.") throw Error("OmniVoice Gradio server has not return a audio url.");
-
-        const response = await fetch(audio[0].url);
-        const arrayBuffer = await response.arrayBuffer();
+        const arrayBuffer = await VoxCPM2Inference(audioData, audioText, text);
 
         fs.writeFileSync(temp_file, Buffer.from(arrayBuffer));
 
