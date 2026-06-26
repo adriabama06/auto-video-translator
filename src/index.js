@@ -3,6 +3,7 @@ import { translateText, translateTextOpenAI } from "./translate.js";
 import { TTS_BACKENDS } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
+import { TimeLog } from "./timelog.js";
 
 if(!process.env.CUSTOM_TTS_MODEL || !TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL]) {
     console.log(`${process.env.CUSTOM_TTS_MODEL} is not a valid backend, please set CUSTOM_TTS_MODEL to any of:`);
@@ -45,12 +46,14 @@ Example:
 
     if (inputLang !== "skip") {
         console.log(`Translating audio from ${inputLang} to ${outputLang}`);
+        const translateLog = new TimeLog(res.length);
         for (const segment of res) {
             if (process.env.TRANSLATE_OPENAI_KEY) {
                 segment.text = await translateTextOpenAI(segment.text, inputLang, outputLang);
             } else {
                 segment.text = await translateText(segment.text, inputLang, outputLang);
             }
+            translateLog.next();
         }
     } else {
         console.log(`Skip translating`);
@@ -62,12 +65,14 @@ Example:
     const audios = [];
 
     console.log("Converting text to audio");
+    const ttsLog = new TimeLog(res.length);
     for (const segment of res) {
         const targetTime = segment.end - segment.start;
 
         let file = await TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL](segment.text, targetTime, outputLang);
 
         audios.push(file);
+        ttsLog.next();
     }
 
     /**

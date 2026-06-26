@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
-import { getDuration } from "./backends/audio.js";
+import { getDuration, getSpeedFilter } from "./backends/audio.js";
 
 import FishSpeechGenerateAudio from "./backends/tts/fish-speech.js";
 import HiggsV3GenerateAudio from "./backends/tts/higgsv3.js";
@@ -87,7 +87,7 @@ export async function textToSpeechOpenAI(text, targetDuration) {
 
     await new Promise((resolve, reject) => {
         ffmpeg(temp_file)
-            .audioFilters(`atempo=${finalSpeed}`)
+            .audioFilters(getSpeedFilter(finalSpeed))
             .on("end", resolve)
             .on("error", reject)
             .save(final_file);

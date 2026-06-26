@@ -1,7 +1,7 @@
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
-import { getDuration } from "../audio.js";
+import { getDuration, getSpeedFilter } from "../audio.js";
 import { getRandomName } from "../../tts.js";
 
 /**
@@ -124,7 +124,7 @@ export default async function FishSpeechGenerateAudio(text, targetDuration) {
 
         await new Promise((resolve, reject) => {
             ffmpeg(temp_file)
-                .audioFilters(`atempo=${finalSpeed}`)
+                .audioFilters(getSpeedFilter(finalSpeed))
                 .on("end", resolve)
                 .on("error", reject)
                 .save(final_file);

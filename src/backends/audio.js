@@ -12,3 +12,15 @@ export async function getDuration(path) {
         });
     });
 }
+
+/**
+ * @param {number} speed
+ * @returns {string}
+ */
+export function getSpeedFilter(speed) {
+    const effect = process.env.FFMPEG_SPEED_EFFECT;
+    if (effect === "rubberband") {
+        return `rubberband=tempo=${speed}`;
+    }
+    return `atempo=${speed}`;
+}

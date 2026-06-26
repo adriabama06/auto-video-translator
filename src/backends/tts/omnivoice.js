@@ -3,7 +3,7 @@ import { Client } from "@gradio/client";
 import { readFile } from "fs/promises";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import { getDuration } from "../audio.js";
+import { getDuration, getSpeedFilter } from "../audio.js";
 
 let client = null;
 
@@ -90,7 +90,7 @@ export default async function OmniVoiceGenerateAudio(text, targetDuration, outpu
 
         await new Promise((resolve, reject) => {
             ffmpeg(temp_file)
-                .audioFilters(`atempo=${finalSpeed}`)
+                .audioFilters(getSpeedFilter(finalSpeed))
                 .on("end", resolve)
                 .on("error", reject)
                 .save(final_file);

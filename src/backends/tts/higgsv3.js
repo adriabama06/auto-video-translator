@@ -2,7 +2,7 @@ import { getRandomName } from "../../tts.js";
 import { readFile } from "fs/promises";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import { getDuration } from "../audio.js";
+import { getDuration, getSpeedFilter } from "../audio.js";
 
 const HiggsV3Inference = async (ref, ref_text, text) => {
     const response = await fetch(`${process.env.CUSTOM_TTS}/v1/audio/speech`, {
@@ -72,7 +72,7 @@ export default async function HiggsV3GenerateAudio(text, targetDuration, outputL
 
         await new Promise((resolve, reject) => {
             ffmpeg(temp_file)
-                .audioFilters(`atempo=${finalSpeed}`)
+                .audioFilters(getSpeedFilter(finalSpeed))
                 .on("end", resolve)
                 .on("error", reject)
                 .save(final_file);
