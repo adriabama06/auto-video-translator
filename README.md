@@ -34,113 +34,10 @@ node . <inputFile> <inputLang> <outputLang>
 Example: `node . my_video.wav en es` to convert from english to spanish
 
 ## Language Support
-> This list may vary depending on the model used. 
 
+All input languages are supported by Whisper (Speech-to-Text) and all output languages are supported by OmniVoice (Text-to-Speech).
 
-## Note: Now, output are the same as input thanks to OmniVoice!!!
-# It means that the output languages are the same as input languages
-| Input Languages (Speech-to-Text) | Output Languages (Text-to-Speech) |
-|----------------------------------|-----------------------------------|
-| [Full list of Whisper v3 languages](https://huggingface.co/openai/whisper-large-v3) | [OpenAudio S1 Mini languages](https://huggingface.co/fishaudio/openaudio-s1-mini) |
-| - English (en)                   | - English (en)                    |
-| - Chinese (zh)                   | - Chinese (zh)                    |
-| - German (de)                    | - Japanese (ja)                   |
-| - Spanish (es)                   | - German (de)                     |
-| - Russian (ru)                   | - French (fr)                     |
-| - Korean (ko)                    | - Spanish (es)                    |
-| - French (fr)                    | - Korean (ko)                     |
-| - Japanese (ja)                  | - Arabic (ar)                     |
-| - Portuguese (pt)                | - Russian (ru)                    |
-| - Turkish (tr)                   | - Dutch (nl)                      |
-| - Polish (pl)                    | - Italian (it)                    |
-| - Catalan (ca)                   | - Polish (pl)                     |
-| - Dutch (nl)                     | - Portuguese (pt)                 |
-| - Arabic (ar)                    |                                   |
-| - Swedish (sv)                   |                                   |
-| - Italian (it)                   |                                   |
-| - Indonesian (id)                |                                   |
-| - Hindi (hi)                     |                                   |
-| - Finnish (fi)                   |                                   |
-| - Vietnamese (vi)                |                                   |
-| - Hebrew (he)                    |                                   |
-| - Ukrainian (uk)                 |                                   |
-| - Greek (el)                     |                                   |
-| - Malay (ms)                     |                                   |
-| - Czech (cs)                     |                                   |
-| - Romanian (ro)                  |                                   |
-| - Danish (da)                    |                                   |
-| - Hungarian (hu)                 |                                   |
-| - Tamil (ta)                     |                                   |
-| - Norwegian (no)                 |                                   |
-| - Thai (th)                      |                                   |
-| - Urdu (ur)                      |                                   |
-| - Croatian (hr)                  |                                   |
-| - Bulgarian (bg)                 |                                   |
-| - Lithuanian (lt)                |                                   |
-| - Latin (la)                     |                                   |
-| - Maori (mi)                     |                                   |
-| - Malayalam (ml)                 |                                   |
-| - Welsh (cy)                     |                                   |
-| - Slovak (sk)                    |                                   |
-| - Telugu (te)                    |                                   |
-| - Persian (fa)                   |                                   |
-| - Latvian (lv)                   |                                   |
-| - Bengali (bn)                   |                                   |
-| - Serbian (sr)                   |                                   |
-| - Azerbaijani (az)               |                                   |
-| - Slovenian (sl)                 |                                   |
-| - Kannada (kn)                   |                                   |
-| - Estonian (et)                  |                                   |
-| - Macedonian (mk)                |                                   |
-| - Breton (br)                    |                                   |
-| - Basque (eu)                    |                                   |
-| - Icelandic (is)                 |                                   |
-| - Armenian (hy)                  |                                   |
-| - Nepali (ne)                    |                                   |
-| - Mongolian (mn)                 |                                   |
-| - Bosnian (bs)                   |                                   |
-| - Kazakh (kk)                    |                                   |
-| - Albanian (sq)                  |                                   |
-| - Swahili (sw)                   |                                   |
-| - Galician (gl)                  |                                   |
-| - Marathi (mr)                   |                                   |
-| - Punjabi (pa)                   |                                   |
-| - Sinhala (si)                   |                                   |
-| - Khmer (km)                     |                                   |
-| - Shona (sn)                     |                                   |
-| - Yoruba (yo)                    |                                   |
-| - Somali (so)                    |                                   |
-| - Afrikaans (af)                 |                                   |
-| - Occitan (oc)                   |                                   |
-| - Georgian (ka)                  |                                   |
-| - Belarusian (be)                |                                   |
-| - Tajik (tg)                     |                                   |
-| - Sindhi (sd)                    |                                   |
-| - Gujarati (gu)                  |                                   |
-| - Amharic (am)                   |                                   |
-| - Yiddish (yi)                   |                                   |
-| - Lao (lo)                       |                                   |
-| - Uzbek (uz)                     |                                   |
-| - Faroese (fo)                   |                                   |
-| - Haitian Creole (ht)            |                                   |
-| - Pashto (ps)                    |                                   |
-| - Turkmen (tk)                   |                                   |
-| - Nynorsk (nn)                   |                                   |
-| - Maltese (mt)                   |                                   |
-| - Sanskrit (sa)                  |                                   |
-| - Luxembourgish (lb)             |                                   |
-| - Burmese (my)                   |                                   |
-| - Tibetan (bo)                   |                                   |
-| - Tagalog (tl)                   |                                   |
-| - Malagasy (mg)                  |                                   |
-| - Assamese (as)                  |                                   |
-| - Tatar (tt)                     |                                   |
-| - Hawaiian (haw)                 |                                   |
-| - Lingala (ln)                   |                                   |
-| - Hausa (ha)                     |                                   |
-| - Bashkir (ba)                   |                                   |
-| - Javanese (jw)                  |                                   |
-| - Sundanese (su)                 |                                   |
+> **Note**: Available languages may vary depending on the model used. Check the specific model's documentation for supported languages.
 
 ## Configuration Options
 
@@ -158,24 +55,28 @@ Uses local Docker containers for private, offline processing
    **Windows (CMD)**:
    ```cmd
    :: Use your machine's local IP (not localhost) for Docker on Windows
+   set STT_BACKEND=openai
    set STT_KEY=-
    set STT_HOST=http://192.168.1.100:8881/v1
+   set TRANSLATE_BACKEND=libre
+   set TRANSLATE_HOST=http://192.168.1.100:8883
+   set TTS_BACKEND=openai
    set TTS_KEY=-
    set TTS_HOST=http://192.168.1.100:8882/v1
    set TTS_VOICE=af_bella
-   set TTS_BACKEND=openai
-   set TRANSLATE_HOST=http://192.168.1.100:8883
    ```
 
    **Linux/macOS**:
    ```bash
+   export STT_BACKEND=openai
    export STT_KEY=-
    export STT_HOST=http://localhost:8881/v1
+   export TRANSLATE_BACKEND=libre
+   export TRANSLATE_HOST=http://localhost:8883
+   export TTS_BACKEND=openai
    export TTS_KEY=-
    export TTS_HOST=http://localhost:8882/v1
    export TTS_VOICE=af_bella
-   export TTS_BACKEND=openai
-   export TRANSLATE_HOST=http://localhost:8883
    ```
 
    > **Important**: Even in local mode, you must set dummy values for both `STT_KEY` and `TTS_KEY`:
@@ -200,15 +101,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=indextts1.5
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=indextts1.5
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
 #### Fish-Speech (OpenAudio-S1-Mini)
@@ -223,15 +124,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=fishspeech
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=fishspeech
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -261,15 +162,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=qwen3tts
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=qwen3tts
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -300,15 +201,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=omnivoice
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=omnivoice
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -337,15 +238,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=voxcpm2
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=voxcpm2
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -373,15 +274,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set TTS_HOST=http://192.168.1.100:8882
    set TTS_BACKEND=higgsv3
-   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export TTS_HOST=http://localhost:8882
    export TTS_BACKEND=higgsv3
-   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -400,13 +301,16 @@ Set these environment variables:
 
 **Windows**:
 ```cmd
+set STT_BACKEND=openai
 set STT_KEY=sk-xxxxxxxx
 set STT_HOST=https://api.openai.com/v1
 
+set TTS_BACKEND=openai
 set TTS_KEY=sk-xxxxxxxx
 set TTS_HOST=https://api.openai.com/v1
 set TTS_VOICE=alloy  # or nova, shimmer, echo
 
+set TRANSLATE_BACKEND=openai
 set TRANSLATE_KEY=sk-xxxxxxxx
 set TRANSLATE_HOST=https://api.openai.com/v1
 set TRANSLATE_MODEL=gpt-4-turbo
@@ -414,13 +318,16 @@ set TRANSLATE_MODEL=gpt-4-turbo
 
 **Linux/macOS**:
 ```bash
+export STT_BACKEND=openai
 export STT_KEY=sk-xxxxxxxx
 export STT_HOST=https://api.openai.com/v1
 
+export TTS_BACKEND=openai
 export TTS_KEY=sk-xxxxxxxx
 export TTS_HOST=https://api.openai.com/v1
 export TTS_VOICE=alloy
 
+export TRANSLATE_BACKEND=openai
 export TRANSLATE_KEY=sk-xxxxxxxx
 export TRANSLATE_HOST=https://api.openai.com/v1
 export TRANSLATE_MODEL=gpt-4-turbo
@@ -507,10 +414,8 @@ node . vlog.wav en fr  # Uses your voice_sample.wav for French
 
 ## Other interesting models that could be added:
 ### Zero-Shot:
-- https://github.com/k2-fsa/ZipVoice - Good results (Enlgish, Chinese) - Apache-2.0 :D
-- https://github.com/bytedance/MegaTTS3 - Good results (Enlgish, Chinese) - Apache-2.0 :D
-- https://github.com/boson-ai/higgs-audio - Very good results (English, Chinese Only?) (Warning: Very big) - Apache-2.0 :D
-- https://github.com/fishaudio/fish-speech - Very good results (Chinese, English, German, Japanese, French, Spanish, Korean, Arabic, Dutch, Russian, Italian, Polish, Portuguese) - cc-by-nc-sa-4.0 :c
+- https://github.com/k2-fsa/ZipVoice - Good results (English, Chinese) - Apache-2.0 :D
+- https://github.com/bytedance/MegaTTS3 - Good results (English, Chinese) - Apache-2.0 :D
 
 ```
 Warning! Any of the audios found in this repository cannot be used for anything other than personal and private use to test the code, non-private and personal use, that is, generating an audio that is uploaded to the internet, shared, sent to someone, even with the purpose of doing harm or not, even if it is just for fun is illegal. You cannot use another person's voices without their consent (in this case my voice), the improper use of their voice will be an infringement of identity theft and can end in serious legal problems, even facing prison sentences of several months or years, this message is only to warn about the use of my voice in this repository and in my YouTube videos, this message also affects previous commits.
