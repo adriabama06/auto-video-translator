@@ -7,6 +7,7 @@ import fs from "fs";
 if(!process.env.CUSTOM_TTS_MODEL || !TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL]) {
     console.log(`${process.env.CUSTOM_TTS_MODEL} is not a valid backend, please set CUSTOM_TTS_MODEL to any of:`);
     Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
+    process.exit(0);
 }
 
 async function main() {

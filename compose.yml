@@ -167,6 +167,32 @@ services:
               capabilities:
                 - gpu
 
+  s2-pro:
+    ports:
+      - 8882:8000
+    image: vllm/vllm-omni:v0.22.0
+    command: bash -c "
+      apt-get update
+      && apt-get install -y git jq libportaudio2 portaudio19-dev
+      && apt-get clean
+      && uv pip install --python \"$(python3 -c 'import sys; print(sys.executable)')\" --no-cache-dir fish-speech
+      && vllm serve fishaudio/s2-pro --quantization fp8 --max_model_len 2048 --deploy-config vllm-omni/vllm_omni/deploy/fish_qwen3_omni.yaml --omni --port 8000 --gpu-memory-utilization 0.8
+      "
+    ipc: host
+    volumes:
+      - ./checkpoints/huggingface:/root/.cache/huggingface
+    environment:
+      - VLLM_USE_DEEP_GEMM=0
+      - VLLM_MOE_USE_DEEP_GEMM=0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:
