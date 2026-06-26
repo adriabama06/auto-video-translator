@@ -40,28 +40,28 @@ class VoiceCloneRequest(BaseModel):
 class VoiceCloneResponse(BaseModel):
     output_audio_base64: str
 
-# Instanciar IndexTTS (una sola vez al iniciar el servidor)
+# Load IndexTTS (only once on server startup)
 tts = IndexTTS(model_dir="checkpoints", cfg_path="checkpoints/config.yaml")
 
 @app.post("/synthesize", response_model=VoiceCloneResponse)
 async def synthesize(request: VoiceCloneRequest):
-    # Decodificar audio Base64 y guardar como archivo WAV
+    # Decode Base64 & store to WAV file
     audio_data = base64.b64decode(request.audio_base64)
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_in:
         tmp_in.write(audio_data)
         input_path = tmp_in.name
 
-    # Definir ruta de salida
+    # Set output path
     output_path = input_path.replace(".wav", "_out.wav")
-    # Ejecutar síntesis de voz con IndexTTS
+    # Run IndexTTS
     tts.infer(input_path, request.text, output_path)
 
-    # Leer audio generado y codificarlo en Base64
+    # Read & convert to Base64
     with open(output_path, "rb") as f:
         out_bytes = f.read()
     output_audio_b64 = base64.b64encode(out_bytes).decode("utf-8")
 
-    # Limpiar archivos temporales
+    # Clear files
     os.remove(input_path)
     os.remove(output_path)
 
@@ -69,4 +69,4 @@ async def synthesize(request: VoiceCloneRequest):
 
 @app.get('/health')
 def health_check():
-    return {"status": "ok", "message": "MegaTTS3 API is working"}
+    return {"status": "ok", "message": "IndexTTS 1.5 API is working"}
