@@ -23,7 +23,7 @@ jobs:
           - service: fish-speech
             image: auto-video-translator-fish-speech
             context: util
-            dockerfile: Dockerfile.openaudio-s1-mini
+            dockerfile: Dockerfile.fish-speech
           - service: qwen3tts
             image: auto-video-translator-qwen3tts
             context: util
