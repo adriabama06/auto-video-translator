@@ -1,15 +1,15 @@
 import fs from "fs";
 import { randomUUID } from "crypto";
-import { getDuration } from "./audio.js";
+import { getDuration } from "../audio.js";
 import ffmpeg from "fluent-ffmpeg";
-import { getRandomName } from "../tts.js";
+import { getRandomName } from "../../tts.js";
 
 /**
  * @param {string} text 
  * @param {number} targetDuration
  * @returns {Promise<string>}
  */
-export default async function IndexTTSGenerateAudio(text, targetDuration) {
+export default async function IndexTTS15GenerateAudio(text, targetDuration) {
     const randomName = getRandomName();
   
     const temp_file = randomName + "_temp_" + ".wav";

@@ -163,6 +163,7 @@ Uses local Docker containers for private, offline processing
    set TTS_OPENAI_KEY=-
    set TTS_OPENAI_HOST=http://192.168.1.100:8882/v1
    set TTS_OPENAI_VOICE=af_bella
+   set CUSTOM_TTS_MODEL=openai
    set RETRANSLATE_HOST=http://192.168.1.100:8883
    ```
 
@@ -173,6 +174,7 @@ Uses local Docker containers for private, offline processing
    export TTS_OPENAI_KEY=-
    export TTS_OPENAI_HOST=http://localhost:8882/v1
    export TTS_OPENAI_VOICE=af_bella
+   export CUSTOM_TTS_MODEL=openai
    export RETRANSLATE_HOST=http://localhost:8883
    ```
 
@@ -186,26 +188,26 @@ Uses local Docker containers for private, offline processing
 ### 🎤 Option 2: Custom TTS (Voice Cloning)
 Use your own voice for translations with one of these models:
 
-#### IndexTTS
+#### IndexTTS 1.5
 - Requires: Audio sample only
 - Port: 8882
 
 1. **Start services**:
    ```bash
-   docker compose up -d whisper-stt libretranslate indextts
+   docker compose up -d whisper-stt libretranslate indextts1.5
    ```
 
 2. **Set environment variables**:
    ```cmd
    :: Windows
    set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=indextts
+   set CUSTOM_TTS_MODEL=indextts1.5
    set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
    export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=indextts
+   export CUSTOM_TTS_MODEL=indextts1.5
    export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
    ```
 

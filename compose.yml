@@ -41,10 +41,10 @@ services:
               capabilities:
                 - gpu
 
-  indextts:
+  indextts1.5:
     ports:
       - 8882:8000
-    image: adriabama06/auto-video-translator-indextts:latest
+    image: adriabama06/auto-video-translator-indextts1.5:latest
     build:
       context: util
       dockerfile: Dockerfile.indextts.1.5

@@ -4,11 +4,12 @@ import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
 import { getDuration } from "./backends/audio.js";
 
-import IndexTTSGenerateAudio from "./backends/indextts.js";
-import FishSpeechGenerateAudio from "./backends/fish-speech.js";
-import OmniVoiceGenerateAudio from "./backends/omnivoice.js";
-import VoxCPM2GenerateAudio from "./backends/voxcpm2.js";
-import HiggsV3GenerateAudio from "./backends/higgsv3.js"
+import FishSpeechGenerateAudio from "./backends/tts/fish-speech.js";
+import HiggsV3GenerateAudio from "./backends/tts/higgsv3.js";
+import IndexTTS15GenerateAudio from "./backends/tts/indextts1.5.js";
+import OmniVoiceGenerateAudio from "./backends/tts/omnivoice.js";
+import Qwen3TTSGenerateAudio from "./backends/tts/qwen3-tts.js";
+import VoxCPM2GenerateAudio from "./backends/tts/voxcpm2.js";
 
 let WORKFLOW_ID = randomUUID().substring(0, 2);
 while(fs.readdirSync(".").find(f => f.startsWith(`WF_${WORKFLOW_ID}`))) {
@@ -100,10 +101,17 @@ export async function textToSpeechOpenAI(text, targetDuration) {
     return final_file;
 }
 
-export {
-    IndexTTSGenerateAudio,
-    FishSpeechGenerateAudio,
-    OmniVoiceGenerateAudio,
-    VoxCPM2GenerateAudio,
-    HiggsV3GenerateAudio
+/**
+ * @type {{
+ * [key: string]: (text: string, targetDuration: number) => Promise<string>
+ * }}
+ */
+export let TTS_BACKENDS = {
+    "openai": textToSpeechOpenAI,
+    "fish-speech": FishSpeechGenerateAudio,
+    "higgsv3": HiggsV3GenerateAudio,
+    "indextts1.5": IndexTTS15GenerateAudio,
+    "omnivoice": OmniVoiceGenerateAudio,
+    "qwen3tts": Qwen3TTSGenerateAudio,
+    "voxcpm2": VoxCPM2GenerateAudio
 };

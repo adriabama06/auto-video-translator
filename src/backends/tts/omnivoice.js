@@ -1,17 +1,18 @@
-import { getRandomName } from "../tts.js";
+import { getRandomName } from "../../tts.js";
 import { Client } from "@gradio/client";
 import { readFile } from "fs/promises";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import { getDuration } from "./audio.js";
+import { getDuration } from "../audio.js";
 
 let client = null;
 
 /**
- * Makes an inference request to the Qwen3-TTS Gradio API
- * Remember: Use --temperature 0 --subtalker-temperature 0 for consistent results
+ * Makes an inference request to the OmniVoice Gradio API
+ * NOTE: MORE LANGUAGES MUST BE ADDED OR USE AUTO MODE
+ * Auto mode menas that outputLang is "Auto"
  */
-const Qwen3TTSInference = async (ref, ref_text, outputLang, text) => {
+const OmniVoiceInference = async (ref, ref_text, outputLang, text, targetDuration) => {
     if(outputLang == "en") outputLang = "English";
     if(outputLang == "zh") outputLang = "Chinese";
     if(outputLang == "jp") outputLang = "Japanese";
@@ -24,25 +25,32 @@ const Qwen3TTSInference = async (ref, ref_text, outputLang, text) => {
     if(outputLang == "it") outputLang = "Italian";
 
     if(client == null) client = await Client.connect(process.env.CUSTOM_TTS);
-    const result = await client.predict("/run_voice_clone", {
-        ref_aud: ref,
-        ref_txt: ref_text,
-        use_xvec: false,
-        text: text,
-        lang_disp: outputLang,
+    const result = await client.predict("/_clone_fn", {
+		text: text,
+		lang: outputLang,
+		ref_aud: ref,
+		ref_text: ref_text,
+		instruct: "",
+		ns: 32,
+		gs: 2.0,
+		dn: true,
+		sp: 1.0,
+		du: targetDuration, // 0 to disable
+		pp: true,
+		po: true
     });
 
     return result.data;
 };
 
 /**
- * Generates audio using Qwen3-TTS with voice cloning
+ * Generates audio using OmniVoice with voice cloning
  * @param {string} text - Text to synthesize
  * @param {number} targetDuration - Target duration for the audio
  * @param {string} outputLang - Target duration for the audio
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
-export default async function Qwen3TTSGenerateAudio(text, targetDuration, outputLang) {
+export default async function OmniVoiceGenerateAudio(text, targetDuration, outputLang) {
     const randomName = getRandomName();
 
     const temp_file = randomName + "_temp_" + ".wav";
@@ -52,16 +60,16 @@ export default async function Qwen3TTSGenerateAudio(text, targetDuration, output
     const audioData = new Blob([audioBuffer], { type: "audio/wav" });
 
     if(!fs.existsSync(process.env.CUSTOM_TTS_SAMPLE + ".txt")) {
-        console.log(`[ERROR] Qwen3-TTS requires a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+        console.log(`[ERROR] OmniVoice requires a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
     const audioText = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE + ".txt", "utf-8").toString();
 
     try {
-        const audio = await Qwen3TTSInference(audioData, audioText, outputLang, text);
+        const audio = await OmniVoiceInference(audioData, audioText, outputLang, text, targetDuration);
         
-        if(!audio[0].url || typeof audio[0].url != "string") throw Error("Qwen3-TTS Gradio server has not return a audio url.");
+        if(!audio[0].url || typeof audio[0].url != "string" || audio[1] != "Done.") throw Error("OmniVoice Gradio server has not return a audio url.");
 
         const response = await fetch(audio[0].url);
         const arrayBuffer = await response.arrayBuffer();

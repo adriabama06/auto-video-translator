@@ -1,8 +1,8 @@
-import { getRandomName } from "../tts.js";
+import { getRandomName } from "../../tts.js";
 import { readFile } from "fs/promises";
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
-import { getDuration } from "./audio.js";
+import { getDuration } from "../audio.js";
 
 const VoxCPM2Inference = async (ref, ref_text, text) => {
     const response = await fetch(`${process.env.CUSTOM_TTS}/v1/audio/speech`, {

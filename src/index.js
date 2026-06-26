@@ -1,9 +1,14 @@
 import Qwen3TTSGenerateAudio from "./backends/qwen3-tts.js";
 import { processSentences, transcribeAudio } from "./stt.js";
 import { translateText, translateTextOpenAI } from "./translate.js";
-import { IndexTTSGenerateAudio, FishSpeechGenerateAudio, textToSpeechOpenAI, OmniVoiceGenerateAudio, VoxCPM2GenerateAudio, HiggsV3GenerateAudio } from "./tts.js";
+import { TTS_BACKENDS } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
+
+if(!process.env.CUSTOM_TTS_MODEL || !TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL]) {
+    console.log(`${process.env.CUSTOM_TTS_MODEL} is not a valid backend, please set CUSTOM_TTS_MODEL to any of:`);
+    Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
+}
 
 async function main() {
     const inputFile = process.argv[2];
@@ -60,37 +65,7 @@ Example:
     for (const segment of res) {
         const targetTime = segment.end - segment.start;
 
-        let file = "";
-
-        switch (process.env.CUSTOM_TTS_MODEL) {
-            case "indextts":
-                file = await IndexTTSGenerateAudio(segment.text, targetTime);
-                break;
-
-            case "fishspeech":
-                file = await FishSpeechGenerateAudio(segment.text, targetTime);
-                break;
-            
-            case "qwen3tts":
-                file = await Qwen3TTSGenerateAudio(segment.text, targetTime, outputLang);
-                break;
-
-            case "omnivoice":
-                file = await OmniVoiceGenerateAudio(segment.text, targetTime, outputLang);
-                break;
-
-            case "voxcpm2":
-                file = await VoxCPM2GenerateAudio(segment.text, targetTime, outputLang);
-                break;
-
-            case "higgsv3":
-                file = await HiggsV3GenerateAudio(segment.text, targetTime, outputLang);
-                break;
-
-            default:
-                file = await textToSpeechOpenAI(segment.text, targetTime);
-                break;
-        }
+        let file = await TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL](segment.text, targetTime, outputLang);
 
         audios.push(file);
     }

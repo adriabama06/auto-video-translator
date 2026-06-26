@@ -1,8 +1,8 @@
 import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { randomUUID } from "crypto";
-import { getDuration } from "./audio.js";
-import { getRandomName } from "../tts.js";
+import { getDuration } from "../audio.js";
+import { getRandomName } from "../../tts.js";
 
 /**
  * @typedef {Object} FishSpeechReferenceAudio
