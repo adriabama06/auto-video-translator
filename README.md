@@ -10,6 +10,7 @@
   - [Qwen3-TTS](#-qwen3-tts)
   - [OmniVoice](#-omnivoice)
   - [VoxCPM2](#-voxcpm2)
+  - [HiggsAudio v3 TTS](#-higgsaudio-v3-tts)
 - [OpenAI API Processing](#-option-3-openai-api-processing)
 
 This tool translates videos by:
@@ -279,7 +280,7 @@ Use your own voice for translations with one of these models:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
-#### ⭐ OmniVoice
+#### ⭐⭐⭐ OmniVoice
 **Voice cloning with optimized VRAM usage** — Uses the same voice cloning approach as Qwen3-TTS with a more efficient model. Base VRAM usage is approximately 2.1 GB, making it suitable for GPUs with limited VRAM.
 
 - Requires: Audio sample + transcription file
@@ -318,7 +319,7 @@ Use your own voice for translations with one of these models:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 
-#### ⭐ VoxCPM2
+#### ⭐⭐ VoxCPM2
 **Voice cloning with support for multiple languages** — Similar to Qwen3-TTS and OmniVoice in terms of setup and usage.
 
 - Requires: Audio sample + transcription file
@@ -351,7 +352,42 @@ Use your own voice for translations with one of these models:
    > - WAV format
    > - If possible be in the **target output language** (Recommended)
    > 
-   > **VoxCPM2 Additional Requirement**:
+> **VoxCPM2 Additional Requirement**:
+> - Create a transcription file with the same name as your audio sample but with `.txt` extension
+> - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
+
+#### ⭐ HiggsAudio v3 TTS
+**Voice cloning with HiggsAudio v3 TTS 4B** — Similar to Qwen3-TTS in terms of setup and usage. Uses approximately 7 GB of VRAM in total.
+
+- Requires: Audio sample + transcription file
+- Port: 8882
+- VRAM: ~7 GB total
+
+1. **Start services**:
+   ```bash
+   docker compose up -d whisper-stt libretranslate higgsv3
+   ```
+
+2. **Set environment variables**:
+   ```cmd
+   :: Windows
+   set CUSTOM_TTS=http://192.168.1.100:8882
+   set CUSTOM_TTS_MODEL=higgsv3
+   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   ```
+   ```bash
+   # Linux/macOS
+   export CUSTOM_TTS=http://localhost:8882
+   export CUSTOM_TTS_MODEL=higgsv3
+   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   ```
+
+   > **Voice Sample Requirements**:
+   > - Clean, clear, noise-free audio
+   > - WAV format
+   > - If possible be in the **target output language** (Recommended)
+   > 
+   > **HiggsAudio v3 Additional Requirement**:
    > - Create a transcription file with the same name as your audio sample but with `.txt` extension
    > - Example: If your sample is `voice_sample.wav`, create `voice_sample.wav.txt` with the transcription
 

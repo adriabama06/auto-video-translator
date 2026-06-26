@@ -138,6 +138,35 @@ services:
               capabilities:
                 - gpu
 
+  higgsv3:
+    ports:
+      - 8882:8000
+    # Use vllm/vllm-omni:v0.23.0 when it releases
+    image: vllm/vllm-openai:v0.23.0
+    command: -c "
+      apt-get update
+      && apt-get install -y git jq
+      && apt-get clean
+      && uv pip install --python \"$(python3 -c 'import sys; print(sys.executable)')\" --no-cache-dir git+https://github.com/vllm-project/vllm-omni.git@329c98ff9d9da37b8fa38bc3ea8005cb8472406f
+      && curl 'https://raw.githubusercontent.com/vllm-project/vllm-omni/36a5e9cfd2e83d602fa83ca8d49b6534e37c604b/vllm_omni/deploy/higgs_multimodal_qwen3.yaml' -L -o higgs_multimodal_qwen3.yaml
+      && vllm serve bosonai/higgs-audio-v3-tts-4b --quantization fp8 --max_model_len 8192 --deploy-config higgs_multimodal_qwen3.yaml --trust-remote-code --omni --port 8000 --gpu-memory-utilization 0.7
+      "
+    entrypoint: bash
+    ipc: host
+    volumes:
+      - ./checkpoints/huggingface:/root/.cache/huggingface
+    environment:
+      - VLLM_USE_DEEP_GEMM=0
+      - VLLM_MOE_USE_DEEP_GEMM=0
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+
   libretranslate:
     image: libretranslate/libretranslate:v1.7.2-cuda
     ports:

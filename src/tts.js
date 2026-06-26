@@ -8,6 +8,7 @@ import IndexTTSGenerateAudio from "./backends/indextts.js";
 import FishSpeechGenerateAudio from "./backends/fish-speech.js";
 import OmniVoiceGenerateAudio from "./backends/omnivoice.js";
 import VoxCPM2GenerateAudio from "./backends/voxcpm2.js";
+import HiggsV3GenerateAudio from "./backends/higgsv3.js"
 
 let WORKFLOW_ID = randomUUID().substring(0, 2);
 while(fs.readdirSync(".").find(f => f.startsWith(`WF_${WORKFLOW_ID}`))) {
@@ -103,5 +104,6 @@ export {
     IndexTTSGenerateAudio,
     FishSpeechGenerateAudio,
     OmniVoiceGenerateAudio,
-    VoxCPM2GenerateAudio
+    VoxCPM2GenerateAudio,
+    HiggsV3GenerateAudio
 };
