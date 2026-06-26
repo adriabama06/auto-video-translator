@@ -1,4 +1,4 @@
-import { processSentences, transcribeAudio } from "./stt.js";
+import { STT_BACKENDS } from "./stt.js";
 import { translateText, translateTextOpenAI } from "./translate.js";
 import { TTS_BACKENDS } from "./tts.js";
 import { spawn } from "child_process";
@@ -8,6 +8,12 @@ import { TimeLog } from "./timelog.js";
 if(!process.env.CUSTOM_TTS_MODEL || !TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL]) {
     console.log(`${process.env.CUSTOM_TTS_MODEL} is not a valid backend, please set CUSTOM_TTS_MODEL to any of:`);
     Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
+    process.exit(0);
+}
+
+if(!process.env.STT_BACKEND || !STT_BACKENDS[process.env.STT_BACKEND]) {
+    console.log(`${process.env.STT_BACKEND} is not a valid backend, please set STT_BACKEND to any of:`);
+    Object.keys(STT_BACKENDS).forEach(k => console.log(` - ${k}`));
     process.exit(0);
 }
 
@@ -32,7 +38,7 @@ Example:
     }
 
     /**
-     * @type {{ start: number, end: number, text: string }[]}
+     * @type {import("./textprocessor.js").AVTSegment[]}
      */
     let res;
 
@@ -41,7 +47,7 @@ Example:
         res = JSON.parse(fs.readFileSync(inputFile).toString());
     } else {
         console.log(`Converting ${inputFile} to text...`);
-        res = await transcribeAudio(inputFile);
+        res = await STT_BACKENDS[process.env.STT_BACKEND](inputFile);
     }
 
     if (inputLang !== "skip") {
