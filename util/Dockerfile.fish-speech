@@ -34,7 +34,7 @@ RUN mkdir -p /opt/fish-speech/checkpoints
 
 ENV CUDA_ENABLED=true
 
-COPY ./entrypoint.openaudio-s1-mini.sh /entrypoint.sh
+COPY ./entrypoint.fish-speech.sh /entrypoint.sh
 
 RUN dos2unix /entrypoint.sh
 

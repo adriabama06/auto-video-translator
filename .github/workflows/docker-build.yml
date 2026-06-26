@@ -20,8 +20,8 @@ jobs:
             image: auto-video-translator-indextts
             context: util
             dockerfile: Dockerfile.indextts.1.5
-          - service: openaudio-s1-mini
-            image: auto-video-translator-openaudio-s1-mini
+          - service: fish-speech
+            image: auto-video-translator-fish-speech
             context: util
             dockerfile: Dockerfile.openaudio-s1-mini
           - service: qwen3tts

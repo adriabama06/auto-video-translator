@@ -65,15 +65,15 @@ services:
               capabilities:
                 - gpu
 
-  openaudio-s1-mini:
+  fish-speech:
     environment:
       - HF_TOKEN=your_token_here
     ports:
       - 8882:6673
-    image: adriabama06/auto-video-translator-openaudio-s1-mini:latest
+    image: adriabama06/auto-video-translator-fish-speech:latest
     build:
       context: util
-      dockerfile: Dockerfile.openaudio-s1-mini
+      dockerfile: Dockerfile.fish-speech
     volumes:
       - ./checkpoints:/opt/fish-speech/checkpoints
     deploy:

@@ -215,7 +215,7 @@ Use your own voice for translations with one of these models:
 
 1. **Start services**:
    ```bash
-   docker compose up -d whisper-stt libretranslate openaudio-s1-mini
+   docker compose up -d whisper-stt libretranslate fish-speech
    ```
 
 2. **Set environment variables**:
