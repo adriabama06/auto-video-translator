@@ -5,10 +5,10 @@ import ffmpeg from "fluent-ffmpeg";
 import { getDuration, getSpeedFilter } from "../audio.js";
 
 const VoxCPM2Inference = async (ref, ref_text, text) => {
-    const response = await fetch(`${process.env.CUSTOM_TTS}/v1/audio/speech`, {
+    const response = await fetch(`${process.env.TTS_HOST}/v1/audio/speech`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${process.env.TTS_OPENAI_KEY ?? "-"}`,
+            "Authorization": `Bearer ${process.env.TTS_KEY ?? "-"}`,
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -42,16 +42,16 @@ export default async function VoxCPM2GenerateAudio(text, targetDuration, outputL
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBuffer = await readFile(process.env.CUSTOM_TTS_SAMPLE);
+    const audioBuffer = await readFile(process.env.TTS_HOST_SAMPLE);
     const audioBase64 = audioBuffer.toString("base64");
     const refAudioDataUrl = `data:audio/wav;base64,${audioBase64}`;
 
-    if(!fs.existsSync(process.env.CUSTOM_TTS_SAMPLE + ".txt")) {
-        console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+    if(!fs.existsSync(process.env.TTS_HOST_SAMPLE + ".txt")) {
+        console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.TTS_HOST_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
-    const audioText = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE + ".txt", "utf-8").toString();
+    const audioText = fs.readFileSync(process.env.TTS_HOST_SAMPLE + ".txt", "utf-8").toString();
 
     try {
         const arrayBuffer = await VoxCPM2Inference(refAudioDataUrl, audioText, text);

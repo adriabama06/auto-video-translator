@@ -158,29 +158,29 @@ Uses local Docker containers for private, offline processing
    **Windows (CMD)**:
    ```cmd
    :: Use your machine's local IP (not localhost) for Docker on Windows
-   set STT_OPENAI_KEY=-
-   set STT_OPENAI_HOST=http://192.168.1.100:8881/v1
-   set TTS_OPENAI_KEY=-
-   set TTS_OPENAI_HOST=http://192.168.1.100:8882/v1
-   set TTS_OPENAI_VOICE=af_bella
-   set CUSTOM_TTS_MODEL=openai
-   set RETRANSLATE_HOST=http://192.168.1.100:8883
+   set STT_KEY=-
+   set STT_HOST=http://192.168.1.100:8881/v1
+   set TTS_KEY=-
+   set TTS_HOST=http://192.168.1.100:8882/v1
+   set TTS_VOICE=af_bella
+   set TTS_BACKEND=openai
+   set TRANSLATE_HOST=http://192.168.1.100:8883
    ```
 
    **Linux/macOS**:
    ```bash
-   export STT_OPENAI_KEY=-
-   export STT_OPENAI_HOST=http://localhost:8881/v1
-   export TTS_OPENAI_KEY=-
-   export TTS_OPENAI_HOST=http://localhost:8882/v1
-   export TTS_OPENAI_VOICE=af_bella
-   export CUSTOM_TTS_MODEL=openai
-   export RETRANSLATE_HOST=http://localhost:8883
+   export STT_KEY=-
+   export STT_HOST=http://localhost:8881/v1
+   export TTS_KEY=-
+   export TTS_HOST=http://localhost:8882/v1
+   export TTS_VOICE=af_bella
+   export TTS_BACKEND=openai
+   export TRANSLATE_HOST=http://localhost:8883
    ```
 
-   > **Important**: Even in local mode, you must set dummy values for both `STT_OPENAI_KEY` and `TTS_OPENAI_KEY`:
-   > - `STT_OPENAI_KEY=-` (dummy value)
-   > - `TTS_OPENAI_KEY=-` (dummy value)
+   > **Important**: Even in local mode, you must set dummy values for both `STT_KEY` and `TTS_KEY`:
+   > - `STT_KEY=-` (dummy value)
+   > - `TTS_KEY=-` (dummy value)
    > These are required for the tool to work properly in local mode.
 
    > **Windows Docker Note**: Replace `192.168.1.100` with your actual local IP address. Find it with `ipconfig` (look for IPv4 Address). Localhost may not work with Docker on Windows.
@@ -200,15 +200,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=indextts1.5
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=indextts1.5
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=indextts1.5
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=indextts1.5
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
 #### Fish-Speech (OpenAudio-S1-Mini)
@@ -223,15 +223,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=fishspeech
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=fishspeech
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=fishspeech
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=fishspeech
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -261,15 +261,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=qwen3tts
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=qwen3tts
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=qwen3tts
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=qwen3tts
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -300,15 +300,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=omnivoice
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=omnivoice
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=omnivoice
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=omnivoice
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -337,15 +337,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=voxcpm2
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=voxcpm2
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=voxcpm2
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=voxcpm2
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -373,15 +373,15 @@ Use your own voice for translations with one of these models:
 2. **Set environment variables**:
    ```cmd
    :: Windows
-   set CUSTOM_TTS=http://192.168.1.100:8882
-   set CUSTOM_TTS_MODEL=higgsv3
-   set CUSTOM_TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_HOST=http://192.168.1.100:8882
+   set TTS_BACKEND=higgsv3
+   set TTS_HOST_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
-   export CUSTOM_TTS=http://localhost:8882
-   export CUSTOM_TTS_MODEL=higgsv3
-   export CUSTOM_TTS_SAMPLE=/path/to/your/voice_sample.wav
+   export TTS_HOST=http://localhost:8882
+   export TTS_BACKEND=higgsv3
+   export TTS_HOST_SAMPLE=/path/to/your/voice_sample.wav
    ```
 
    > **Voice Sample Requirements**:
@@ -400,30 +400,30 @@ Set these environment variables:
 
 **Windows**:
 ```cmd
-set STT_OPENAI_KEY=sk-xxxxxxxx
-set STT_OPENAI_HOST=https://api.openai.com/v1
+set STT_KEY=sk-xxxxxxxx
+set STT_HOST=https://api.openai.com/v1
 
-set TTS_OPENAI_KEY=sk-xxxxxxxx
-set TTS_OPENAI_HOST=https://api.openai.com/v1
-set TTS_OPENAI_VOICE=alloy  # or nova, shimmer, echo
+set TTS_KEY=sk-xxxxxxxx
+set TTS_HOST=https://api.openai.com/v1
+set TTS_VOICE=alloy  # or nova, shimmer, echo
 
-set TRANSLATE_OPENAI_KEY=sk-xxxxxxxx
-set TRANSLATE_OPENAI_HOST=https://api.openai.com/v1
-set TRANSLATE_OPENAI_MODEL=gpt-4-turbo
+set TRANSLATE_KEY=sk-xxxxxxxx
+set TRANSLATE_HOST=https://api.openai.com/v1
+set TRANSLATE_MODEL=gpt-4-turbo
 ```
 
 **Linux/macOS**:
 ```bash
-export STT_OPENAI_KEY=sk-xxxxxxxx
-export STT_OPENAI_HOST=https://api.openai.com/v1
+export STT_KEY=sk-xxxxxxxx
+export STT_HOST=https://api.openai.com/v1
 
-export TTS_OPENAI_KEY=sk-xxxxxxxx
-export TTS_OPENAI_HOST=https://api.openai.com/v1
-export TTS_OPENAI_VOICE=alloy
+export TTS_KEY=sk-xxxxxxxx
+export TTS_HOST=https://api.openai.com/v1
+export TTS_VOICE=alloy
 
-export TRANSLATE_OPENAI_KEY=sk-xxxxxxxx
-export TRANSLATE_OPENAI_HOST=https://api.openai.com/v1
-export TRANSLATE_OPENAI_MODEL=gpt-4-turbo
+export TRANSLATE_KEY=sk-xxxxxxxx
+export TRANSLATE_HOST=https://api.openai.com/v1
+export TRANSLATE_MODEL=gpt-4-turbo
 ```
 
 ## Advanced Input Options

@@ -1,21 +1,9 @@
 import { STT_BACKENDS } from "./stt.js";
-import { translateText, translateTextOpenAI } from "./translate.js";
+import { TRANSLATE_BACKENDS } from "./translate.js";
 import { TTS_BACKENDS } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
 import { TimeLog } from "./timelog.js";
-
-if(!process.env.CUSTOM_TTS_MODEL || !TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL]) {
-    console.log(`${process.env.CUSTOM_TTS_MODEL} is not a valid backend, please set CUSTOM_TTS_MODEL to any of:`);
-    Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
-    process.exit(0);
-}
-
-if(!process.env.STT_BACKEND || !STT_BACKENDS[process.env.STT_BACKEND]) {
-    console.log(`${process.env.STT_BACKEND} is not a valid backend, please set STT_BACKEND to any of:`);
-    Object.keys(STT_BACKENDS).forEach(k => console.log(` - ${k}`));
-    process.exit(0);
-}
 
 async function main() {
     const inputFile = process.argv[2];
@@ -46,23 +34,35 @@ Example:
         console.log(`Reading ${inputFile}...`);
         res = JSON.parse(fs.readFileSync(inputFile).toString());
     } else {
+        if(!process.env.STT_BACKEND || !STT_BACKENDS[process.env.STT_BACKEND]) {
+            console.log(`${process.env.STT_BACKEND} is not a valid backend, please set STT_BACKEND to any of:`);
+            Object.keys(STT_BACKENDS).forEach(k => console.log(` - ${k}`));
+            process.exit(0);
+        }
         console.log(`Converting ${inputFile} to text...`);
         res = await STT_BACKENDS[process.env.STT_BACKEND](inputFile);
     }
 
     if (inputLang !== "skip") {
+        if(!process.env.TRANSLATE_BACKEND || !TRANSLATE_BACKENDS[process.env.TRANSLATE_BACKEND]) {
+            console.log(`${process.env.TRANSLATE_BACKEND} is not a valid backend, please set TRANSLATE_BACKEND to any of:`);
+            Object.keys(TRANSLATE_BACKENDS).forEach(k => console.log(` - ${k}`));
+            process.exit(0);
+        }
         console.log(`Translating audio from ${inputLang} to ${outputLang}`);
         const translateLog = new TimeLog(res.length);
         for (const segment of res) {
-            if (process.env.TRANSLATE_OPENAI_KEY) {
-                segment.text = await translateTextOpenAI(segment.text, inputLang, outputLang);
-            } else {
-                segment.text = await translateText(segment.text, inputLang, outputLang);
-            }
+            segment.text = await TRANSLATE_BACKENDS[process.env.TRANSLATE_BACKEND](segment.text, inputLang, outputLang);
             translateLog.next();
         }
     } else {
         console.log(`Skip translating`);
+    }
+
+    if(!process.env.TTS_BACKEND || !TTS_BACKENDS[process.env.TTS_BACKEND]) {
+        console.log(`${process.env.TTS_BACKEND} is not a valid backend, please set TTS_BACKEND to any of:`);
+        Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
+        process.exit(0);
     }
 
     /**
@@ -75,7 +75,7 @@ Example:
     for (const segment of res) {
         const targetTime = segment.end - segment.start;
 
-        let file = await TTS_BACKENDS[process.env.CUSTOM_TTS_MODEL](segment.text, targetTime, outputLang);
+        let file = await TTS_BACKENDS[process.env.TTS_BACKEND](segment.text, targetTime, outputLang);
 
         audios.push(file);
         ttsLog.next();

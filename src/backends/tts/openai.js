@@ -12,8 +12,8 @@ import { getDuration, getSpeedFilter } from "../audio.js";
  */
 export default async function OpenAIGenerateAudio(text, targetDuration) {
     const client = new OpenAI({
-        apiKey: process.env.TTS_OPENAI_KEY,
-        baseURL: process.env.TTS_OPENAI_HOST
+        apiKey: process.env.TTS_KEY,
+        baseURL: process.env.TTS_HOST
     });
 
     const randomName = getRandomName();
@@ -24,7 +24,7 @@ export default async function OpenAIGenerateAudio(text, targetDuration) {
 
     let response = await client.audio.speech.create({
         model: "tts-1",
-        voice: process.env.TTS_OPENAI_VOICE,
+        voice: process.env.TTS_VOICE,
         input: text,
         response_format: "wav"
     });
@@ -37,7 +37,7 @@ export default async function OpenAIGenerateAudio(text, targetDuration) {
 
     response = await client.audio.speech.create({
         model: "tts-1",
-        voice: process.env.TTS_OPENAI_VOICE,
+        voice: process.env.TTS_VOICE,
         input: text,
         response_format: "wav",
         speed: newSpeed.toFixed(2)

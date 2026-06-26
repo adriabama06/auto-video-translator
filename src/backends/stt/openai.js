@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import fs from "fs";
 
-import { processSentences } from "../../stt.js";
+import { processSentences } from "../../textprocessor.js";
 
 /**
  * Transcribes an audio file using OpenAI Whisper or anyother compatible model
@@ -10,8 +10,8 @@ import { processSentences } from "../../stt.js";
  */
 async function OpenAIInference(audioFilePath) {
     const client = new OpenAI({
-        apiKey: process.env.STT_OPENAI_KEY,
-        baseURL: process.env.STT_OPENAI_HOST
+        apiKey: process.env.STT_KEY,
+        baseURL: process.env.STT_HOST
     });
 
     try {
@@ -19,7 +19,7 @@ async function OpenAIInference(audioFilePath) {
 
         const transcription = await client.audio.transcriptions.create({
             file: fs.createReadStream(audioFilePath),
-            model: process.env.STT_OPENAI_MODEL ?? "whisper-1",
+            model: process.env.STT_MODEL ?? "whisper-1",
             response_format: "verbose_json",
             timestamp_granularities: ["segment"],
             temperature: 0
@@ -41,7 +41,7 @@ async function OpenAIInference(audioFilePath) {
 export default async function OpenAIGenerateTranscription(audioFilePath) {
     {
         // Download model (speaches) & check model
-        const response = await fetch(`${process.env.STT_OPENAI_HOST}/models/${process.env.STT_OPENAI_MODEL ?? "whisper-1"}`, {
+        const response = await fetch(`${process.env.STT_HOST}/models/${process.env.STT_MODEL ?? "whisper-1"}`, {
             method: "POST"
         });
 

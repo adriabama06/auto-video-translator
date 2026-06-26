@@ -23,7 +23,7 @@ const Qwen3TTSInference = async (ref, ref_text, outputLang, text) => {
     if(outputLang == "es") outputLang = "Spanish";
     if(outputLang == "it") outputLang = "Italian";
 
-    if(client == null) client = await Client.connect(process.env.CUSTOM_TTS);
+    if(client == null) client = await Client.connect(process.env.TTS_HOST);
     const result = await client.predict("/run_voice_clone", {
         ref_aud: ref,
         ref_txt: ref_text,
@@ -48,15 +48,15 @@ export default async function Qwen3TTSGenerateAudio(text, targetDuration, output
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBuffer = await readFile(process.env.CUSTOM_TTS_SAMPLE);
+    const audioBuffer = await readFile(process.env.TTS_HOST_SAMPLE);
     const audioData = new Blob([audioBuffer], { type: "audio/wav" });
 
-    if(!fs.existsSync(process.env.CUSTOM_TTS_SAMPLE + ".txt")) {
-        console.log(`[ERROR] Qwen3-TTS requires a file named sample.wav.txt (Expected file: ${process.env.CUSTOM_TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+    if(!fs.existsSync(process.env.TTS_HOST_SAMPLE + ".txt")) {
+        console.log(`[ERROR] Qwen3-TTS requires a file named sample.wav.txt (Expected file: ${process.env.TTS_HOST_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
-    const audioText = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE + ".txt", "utf-8").toString();
+    const audioText = fs.readFileSync(process.env.TTS_HOST_SAMPLE + ".txt", "utf-8").toString();
 
     try {
         const audio = await Qwen3TTSInference(audioData, audioText, outputLang, text);

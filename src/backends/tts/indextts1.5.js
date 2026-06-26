@@ -15,10 +15,10 @@ export default async function IndexTTS15GenerateAudio(text, targetDuration) {
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBytes = fs.readFileSync(process.env.CUSTOM_TTS_SAMPLE);
+    const audioBytes = fs.readFileSync(process.env.TTS_HOST_SAMPLE);
     const audioBase64 = audioBytes.toString("base64");
 
-    let response = await fetch(`${process.env.CUSTOM_TTS}/synthesize`, {
+    let response = await fetch(`${process.env.TTS_HOST}/synthesize`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

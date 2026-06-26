@@ -5,7 +5,7 @@ import fs from "fs";
  * @param {number} seconds - Time in seconds
  * @returns {string}
  */
-function formatTime(seconds) {
+export function formatTime(seconds) {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
@@ -19,7 +19,7 @@ function formatTime(seconds) {
  * @param {import("./textprocessor.js").AVTSegment[]} subtitles - Array of subtitles
  * @returns {string} - SRT content
  */
-function generateSRTString(subtitles) {
+export function generateSRTString(subtitles) {
     let srtContent = '';
 
     subtitles.forEach((subtitle, index) => {
@@ -39,7 +39,7 @@ function generateSRTString(subtitles) {
  * @param {import("./textprocessor.js").AVTSegment[]} subtitles - Array of subtitles
  * @param {string} outputPath - Path to the output file
  */
-function generateSRTFile(subtitles, outputPath) {
+export function generateSRTFile(subtitles, outputPath) {
     const srtContent = generateSRTString(subtitles);
     fs.writeFileSync(outputPath, srtContent, 'utf8');
     console.log(`SRT file generated: ${outputPath}`);
