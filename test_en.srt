@@ -1,0 +1,11 @@
+1
+00:00:00,250 --> 00:00:04,120
+This will be the test audio I'll be using throughout development.
+
+2
+00:00:06,350 --> 00:00:09,940
+To see if I can get the program to work or not.
+
+3
+00:00:10,820 --> 00:00:12,341
+I just hope it actually works.

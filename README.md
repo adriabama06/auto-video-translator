@@ -3,6 +3,7 @@
 
 ## Table of Contents
 - [Quick Start](#quick-start)
+- [Example workflow](#example-workflow)
 - [Local Processing (Recommended)](#-option-1-local-processing-recommended)
 - [Custom TTS (Voice Cloning)](#-option-2-custom-tts-voice-cloning)
   - [IndexTTS](#indextts)
@@ -32,6 +33,65 @@ npm install
 node . <inputFile> <inputLang> <outputLang>
 ```
 Example: `node . my_video.wav en es` to convert from english to spanish
+
+## Example workflow
+`If you are in Linux/Mac change set ..., to export ...`  
+`If you are in Linux/Mac you can use localhost, if you are on windows use your local ip (windows docker don't work with localhost or 127.0.0.1, idk why)`
+### Full automatic + kokorotts
+```cmd
+npm i
+docker compose up -d whisper-stt libretranslate omnivoice
+
+set STT_BACKEND=openai
+set STT_KEY=-
+set STT_HOST=http://192.168.1.100:8881/v1
+set TRANSLATE_BACKEND=libre
+set TRANSLATE_HOST=http://192.168.1.100:8883
+set TTS_BACKEND=openai
+set TTS_KEY=-
+set TTS_HOST=http://192.168.1.100:8882/v1
+set TTS_VOICE=af_bella
+
+:: node . <inputFile> <inputLang> <outputLang>, example:
+node . test.wav es en
+```
+
+### Full automatic + omnivoice (voice cloning)
+```cmd
+npm i
+docker compose up -d whisper-stt libretranslate omnivoice
+
+set STT_BACKEND=openai
+set STT_KEY=-
+set STT_HOST=http://192.168.1.100:8881/v1
+set TRANSLATE_BACKEND=libre
+set TRANSLATE_HOST=http://192.168.1.100:8883
+set TTS_BACKEND=omnivoice
+set TTS_HOST=http://192.168.1.100:8882
+set TTS_SAMPLE=C:\Users\adriabama06\github\auto-video-translator\adri_sample_en.wav :: Or .\adri_sample_en.wav
+
+node . test.wav es en
+```
+
+### Manual, only omnivoice (voice cloning)
+```cmd
+npm i
+docker compose up -d omnivoice
+
+set TTS_BACKEND=omnivoice
+set TTS_HOST=http://192.168.1.100:8882
+set TTS_SAMPLE=C:\Users\adriabama06\github\auto-video-translator\adri_sample_en.wav :: Or .\adri_sample_en.wav
+
+node convert_srt_to_json.js test_en.srt
+
+node . test_en.json skip en
+```
+
+Remember on end use:
+```
+docker compose down
+```
+To stop the containers, use `--rmi all` to also delete the images
 
 ## Language Support
 
@@ -103,7 +163,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=indextts1.5
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
@@ -126,7 +186,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=fishspeech
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
@@ -164,7 +224,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=qwen3tts
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
@@ -203,7 +263,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=omnivoice
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
@@ -240,7 +300,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=voxcpm2
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
@@ -276,7 +336,7 @@ Use your own voice for translations with one of these models:
    :: Windows
    set TTS_BACKEND=higgsv3
    set TTS_HOST=http://192.168.1.100:8882
-   set TTS_SAMPLE=C:\\path\\to\\your\\voice_sample.wav
+   set TTS_SAMPLE=C:\path\to\your\voice_sample.wav
    ```
    ```bash
    # Linux/macOS
