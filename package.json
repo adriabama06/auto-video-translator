@@ -1,6 +1,6 @@
 {
   "name": "auto-video-translator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Change the video language using AI like on YouTube, but totally local",
   "main": "src/index.js",
   "type": "module",

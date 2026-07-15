@@ -4,6 +4,7 @@ import { TTS_BACKENDS } from "./tts.js";
 import { spawn } from "child_process";
 import fs from "fs";
 import { TimeLog } from "./timelog.js";
+import { loadArgs } from "./args.js";
 
 async function main() {
     const inputFile = process.argv[2];
@@ -24,6 +25,8 @@ Example:
     if (!fs.existsSync(inputFile)) {
         throw new Error(`File does not exist: ${inputFile}`);
     }
+
+    loadArgs();
 
     /**
      * @type {import("./textprocessor.js").AVTSegment[]}
