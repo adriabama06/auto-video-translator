@@ -4,12 +4,28 @@ import { getDuration, getSpeedFilter } from "../audio.js";
 import ffmpeg from "fluent-ffmpeg";
 import { getRandomName } from "../../tts.js";
 
+export function IndexTTS15GenerateAudioCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by IndexTTS15GenerateAudio`));
+
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * @param {string} text 
  * @param {number} targetDuration
  * @returns {Promise<string>}
  */
-export default async function IndexTTS15GenerateAudio(text, targetDuration) {
+export async function IndexTTS15GenerateAudio(text, targetDuration) {
     const randomName = getRandomName();
   
     const temp_file = randomName + "_temp_" + ".wav";

@@ -2,7 +2,6 @@ import { STT_BACKENDS } from "./stt.js";
 import { TTS_BACKENDS } from "./tts.js";
 import { TRANSLATE_BACKENDS } from "./translate.js";
 
-
 import fs from "fs";
 
 const packageConfig = JSON.parse(fs.readFileSync("package.json").toString());

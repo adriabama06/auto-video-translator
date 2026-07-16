@@ -1,12 +1,15 @@
-import OpenAITranslate from "./backends/translate/openai.js";
-import LibreTranslate from "./backends/translate/libre.js";
+import { OpenAITranslate, OpenAITranslateCheckEnv } from "./backends/translate/openai.js";
+import { LibreTranslate, LibreTranslateCheckEnv } from "./backends/translate/libre.js";
 
 /**
  * @type {{
- * [key: string]: (text: string, sourceLanguage: string, targetLanguage: string) => Promise<string>
+ * [key: string]: {
+ *      run: (text: string, sourceLanguage: string, targetLanguage: string) => Promise<string>,
+ *      check: () => boolean
+ *  }
  * }}
  */
 export let TRANSLATE_BACKENDS = {
-    "openai": OpenAITranslate,
-    "libre": LibreTranslate
+    "openai": { run: OpenAITranslate, check: () => OpenAITranslateCheckEnv },
+    "libre": { run: LibreTranslate, check: () => LibreTranslateCheckEnv }
 };

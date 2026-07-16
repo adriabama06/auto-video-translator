@@ -4,6 +4,24 @@ import { randomUUID } from "crypto";
 import { getDuration, getSpeedFilter } from "../audio.js";
 import { getRandomName } from "../../tts.js";
 
+export function FishSpeechGenerateAudioCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by FishSpeechGenerateAudio`));
+
+        return false;
+    }
+
+    if(!process.env.TTS_KEY) console.log('TTS_KEY not set, by default this code uses "-"');
+
+    return true;
+}
+
 /**
  * @typedef {Object} FishSpeechReferenceAudio
  * @property {string} audio - Base64 encoded audio data
@@ -74,7 +92,7 @@ const FishSpeechInference = async (data) => {
  * @param {number} targetDuration - Target duration for the audio
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
-export default async function FishSpeechGenerateAudio(text, targetDuration) {
+export async function FishSpeechGenerateAudio(text, targetDuration) {
     const randomName = getRandomName();
 
     const temp_file = randomName + "_temp_" + ".wav";

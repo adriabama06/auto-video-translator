@@ -5,6 +5,22 @@ import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { getDuration, getSpeedFilter } from "../audio.js";
 
+export function Qwen3TTSGenerateAudioCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by Qwen3TTSGenerateAudio`));
+
+        return false;
+    }
+
+    return true;
+}
+
 let client = null;
 
 /**
@@ -42,7 +58,7 @@ const Qwen3TTSInference = async (ref, ref_text, outputLang, text) => {
  * @param {string} outputLang - Target duration for the audio
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
-export default async function Qwen3TTSGenerateAudio(text, targetDuration, outputLang) {
+export async function Qwen3TTSGenerateAudio(text, targetDuration, outputLang) {
     const randomName = getRandomName();
 
     const temp_file = randomName + "_temp_" + ".wav";

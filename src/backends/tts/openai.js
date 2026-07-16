@@ -5,14 +5,32 @@ import OpenAI from "openai";
 import { getRandomName } from "../../tts.js";
 import { getDuration, getSpeedFilter } from "../audio.js";
 
+export function OpenAIGenerateAudioCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["TTS_HOST", "TTS_VOICE"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by OpenAIGenerateAudio`));
+
+        return false;
+    }
+
+    if(!process.env.TTS_KEY) console.log('TTS_KEY not set, by default this code uses "-"');
+
+    return true;
+}
+
 /**
  * @param {string} text 
  * @param {number} targetDuration
  * @returns {Promise<string>}
  */
-export default async function OpenAIGenerateAudio(text, targetDuration) {
+export async function OpenAIGenerateAudio(text, targetDuration) {
     const client = new OpenAI({
-        apiKey: process.env.TTS_KEY,
+        apiKey: process.env.TTS_KEY ?? "-",
         baseURL: process.env.TTS_HOST
     });
 

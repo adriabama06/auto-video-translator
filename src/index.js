@@ -5,6 +5,7 @@ import { spawn } from "child_process";
 import fs from "fs";
 import { TimeLog } from "./timelog.js";
 import { loadArgs } from "./args.js";
+import { checkEnv } from "./envcheck.js";
 
 async function main() {
     const inputFile = process.argv[2];
@@ -27,6 +28,7 @@ Example:
     }
 
     loadArgs();
+    checkEnv();
 
     /**
      * @type {import("./textprocessor.js").AVTSegment[]}
@@ -43,7 +45,7 @@ Example:
             process.exit(0);
         }
         console.log(`Converting ${inputFile} to text...`);
-        res = await STT_BACKENDS[process.env.STT_BACKEND](inputFile);
+        res = await STT_BACKENDS[process.env.STT_BACKEND].run(inputFile);
     }
 
     if (inputLang !== "skip") {
@@ -55,7 +57,7 @@ Example:
         console.log(`Translating audio from ${inputLang} to ${outputLang}`);
         const translateLog = new TimeLog(res.length);
         for (const segment of res) {
-            segment.text = await TRANSLATE_BACKENDS[process.env.TRANSLATE_BACKEND](segment.text, inputLang, outputLang);
+            segment.text = await TRANSLATE_BACKENDS[process.env.TRANSLATE_BACKEND].run(segment.text, inputLang, outputLang);
             translateLog.next();
         }
     } else {
@@ -78,7 +80,7 @@ Example:
     for (const segment of res) {
         const targetTime = segment.end - segment.start;
 
-        let file = await TTS_BACKENDS[process.env.TTS_BACKEND](segment.text, targetTime, outputLang);
+        let file = await TTS_BACKENDS[process.env.TTS_BACKEND].run(segment.text, targetTime, outputLang);
 
         audios.push(file);
         ttsLog.next();

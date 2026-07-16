@@ -4,6 +4,24 @@ import fs from "fs";
 import ffmpeg from "fluent-ffmpeg";
 import { getDuration, getSpeedFilter } from "../audio.js";
 
+export function VoxCPM2GenerateAudioCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by VoxCPM2GenerateAudio`));
+
+        return false;
+    }
+
+    if(!process.env.TTS_KEY) console.log('TTS_KEY not set, by default this code uses "-"');
+
+    return true;
+}
+
 const VoxCPM2Inference = async (ref, ref_text, text) => {
     const response = await fetch(`${process.env.TTS_HOST}/v1/audio/speech`, {
         method: "POST",
@@ -36,7 +54,7 @@ const VoxCPM2Inference = async (ref, ref_text, text) => {
  * @param {string} outputLang - Target duration for the audio
  * @returns {Promise<string>} Path to the generated audio file, or empty string on failure
  */
-export default async function VoxCPM2GenerateAudio(text, targetDuration, outputLang) {
+export async function VoxCPM2GenerateAudio(text, targetDuration, outputLang) {
     const randomName = getRandomName();
 
     const temp_file = randomName + "_temp_" + ".wav";

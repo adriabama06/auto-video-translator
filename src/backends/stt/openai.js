@@ -3,6 +3,24 @@ import fs from "fs";
 
 import { processSentences } from "../../textprocessor.js";
 
+export function OpenAIGenerateTranscriptionCheckEnv() {
+    let ENV_NOT_SET = [];
+    
+    for(const KEY of ["STT_HOST", "STT_KEY"]) {
+        if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
+    }
+
+    if(ENV_NOT_SET.length > 0) {
+        ENV_NOT_SET.forEach(KEY => console.log(`${KEY} not set, required by OpenAIGenerateTranscription`));
+
+        return false;
+    }
+
+    if(!process.env.STT_MODEL) console.log('STT_MODEL not set, by default this code uses "whisper-1"');
+
+    return true;
+}
+
 /**
  * Transcribes an audio file using OpenAI Whisper or anyother compatible model
  * @param {string} audioFilePath - Path to the audio file
@@ -38,7 +56,7 @@ async function OpenAIInference(audioFilePath) {
  * @param {string} audioFilePath - Path to the audio file
  * @returns {Promise<import("../../textprocessor.js").AVTSegment[] | undefined>} - Result with subtitles and statistics
  */
-export default async function OpenAIGenerateTranscription(audioFilePath) {
+export async function OpenAIGenerateTranscription(audioFilePath) {
     {
         // Download model (speaches) & check model
         const response = await fetch(`${process.env.STT_HOST}/models/${process.env.STT_MODEL ?? "whisper-1"}`, {
