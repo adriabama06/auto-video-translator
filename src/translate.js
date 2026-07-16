@@ -10,6 +10,6 @@ import { LibreTranslate, LibreTranslateCheckEnv } from "./backends/translate/lib
  * }}
  */
 export let TRANSLATE_BACKENDS = {
-    "openai": { run: OpenAITranslate, check: () => OpenAITranslateCheckEnv },
-    "libre": { run: LibreTranslate, check: () => LibreTranslateCheckEnv }
+    "openai": { run: OpenAITranslate, check: OpenAITranslateCheckEnv },
+    "libre": { run: LibreTranslate, check: LibreTranslateCheckEnv }
 };

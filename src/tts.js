@@ -43,11 +43,11 @@ export function getRandomName() {
  * }}
  */
 export let TTS_BACKENDS = {
-    "openai": { run: OpenAIGenerateAudio, check: () => OpenAIGenerateAudioCheckEnv },
-    "fish-speech": { run: FishSpeechGenerateAudio, check: () => FishSpeechGenerateAudioCheckEnv },
-    "higgsv3": { run: HiggsV3GenerateAudio, check: () => HiggsV3GenerateAudioCheckEnv },
-    "indextts1.5": { run: IndexTTS15GenerateAudio, check: () => IndexTTS15GenerateAudioCheckEnv },
-    "omnivoice": { run: OmniVoiceGenerateAudio, check: () => OmniVoiceGenerateAudioCheckEnv },
-    "qwen3tts": { run: Qwen3TTSGenerateAudio, check: () => Qwen3TTSGenerateAudioCheckEnv },
-    "voxcpm2": { run: VoxCPM2GenerateAudio, check: () => VoxCPM2GenerateAudioCheckEnv }
+    "openai": { run: OpenAIGenerateAudio, check: OpenAIGenerateAudioCheckEnv },
+    "fish-speech": { run: FishSpeechGenerateAudio, check: FishSpeechGenerateAudioCheckEnv },
+    "higgsv3": { run: HiggsV3GenerateAudio, check: HiggsV3GenerateAudioCheckEnv },
+    "indextts1.5": { run: IndexTTS15GenerateAudio, check: IndexTTS15GenerateAudioCheckEnv },
+    "omnivoice": { run: OmniVoiceGenerateAudio, check: OmniVoiceGenerateAudioCheckEnv },
+    "qwen3tts": { run: Qwen3TTSGenerateAudio, check: Qwen3TTSGenerateAudioCheckEnv },
+    "voxcpm2": { run: VoxCPM2GenerateAudio, check: VoxCPM2GenerateAudioCheckEnv }
 };

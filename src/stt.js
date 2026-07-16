@@ -9,5 +9,5 @@ import { OpenAIGenerateTranscription, OpenAIGenerateTranscriptionCheckEnv } from
  * }}
  */
 export let STT_BACKENDS = {
-    "openai": { run: OpenAIGenerateTranscription, check: () => OpenAIGenerateTranscriptionCheckEnv }
+    "openai": { run: OpenAIGenerateTranscription, check: OpenAIGenerateTranscriptionCheckEnv }
 };

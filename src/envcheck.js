@@ -29,7 +29,7 @@ export function checkEnv() {
 
     if(translate_backend) {
         if(!TRANSLATE_BACKENDS[translate_backend]) {
-            console.log(`${translate_backend} is not a valid backend, please set TRANSLATE_BACKENDS to any of:`);
+            console.log(`${translate_backend} is not a valid backend, please set TRANSLATE_BACKEND to any of:`);
             Object.keys(TRANSLATE_BACKENDS).forEach(k => console.log(` - ${k}`));
             process.exit(0);
         }

@@ -39,21 +39,11 @@ Example:
         console.log(`Reading ${inputFile}...`);
         res = JSON.parse(fs.readFileSync(inputFile).toString());
     } else {
-        if(!process.env.STT_BACKEND || !STT_BACKENDS[process.env.STT_BACKEND]) {
-            console.log(`${process.env.STT_BACKEND} is not a valid backend, please set STT_BACKEND to any of:`);
-            Object.keys(STT_BACKENDS).forEach(k => console.log(` - ${k}`));
-            process.exit(0);
-        }
         console.log(`Converting ${inputFile} to text...`);
         res = await STT_BACKENDS[process.env.STT_BACKEND].run(inputFile);
     }
 
     if (inputLang !== "skip") {
-        if(!process.env.TRANSLATE_BACKEND || !TRANSLATE_BACKENDS[process.env.TRANSLATE_BACKEND]) {
-            console.log(`${process.env.TRANSLATE_BACKEND} is not a valid backend, please set TRANSLATE_BACKEND to any of:`);
-            Object.keys(TRANSLATE_BACKENDS).forEach(k => console.log(` - ${k}`));
-            process.exit(0);
-        }
         console.log(`Translating audio from ${inputLang} to ${outputLang}`);
         const translateLog = new TimeLog(res.length);
         for (const segment of res) {
@@ -62,12 +52,6 @@ Example:
         }
     } else {
         console.log(`Skip translating`);
-    }
-
-    if(!process.env.TTS_BACKEND || !TTS_BACKENDS[process.env.TTS_BACKEND]) {
-        console.log(`${process.env.TTS_BACKEND} is not a valid backend, please set TTS_BACKEND to any of:`);
-        Object.keys(TTS_BACKENDS).forEach(k => console.log(` - ${k}`));
-        process.exit(0);
     }
 
     /**
