@@ -36,4 +36,10 @@ export function checkEnv() {
 
         if(!TRANSLATE_BACKENDS[translate_backend].check()) process.exit(0);
     }
+
+    if(!tts_backend) {
+        console.log("TTS Backend is required to work");
+
+        process.exit(0);
+    }
 }

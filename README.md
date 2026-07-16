@@ -54,6 +54,9 @@ set TTS_VOICE=af_bella
 
 :: node . <inputFile> <inputLang> <outputLang>, example:
 node . test.wav es en
+
+:: Or now, you can use CLI arguments and skip using env variables just like this:
+node . test.wav es en --stt-backend openai --stt-key - --stt-host http://192.168.1.100:8881/v1 --translate-backend libre --translate-host http://192.168.1.100:8883 --tts-backend openai --tts-key - --tts-host http://192.168.1.100:8882/v1 --tts-voice af_bella
 ```
 
 ### Full automatic + omnivoice (voice cloning)
@@ -85,6 +88,10 @@ set TTS_SAMPLE=C:\Users\adriabama06\github\auto-video-translator\adri_sample_en.
 node convert_srt_to_json.js test_en.srt
 
 node . test_en.json skip en
+
+:: Or using only CLI arguments:
+
+node . test_en.json skip en --tts-backend omnivoice --tts-host http://192.168.1.100:8882 --tts-sample .\adri_sample_en.wav
 ```
 
 Remember on end use:
