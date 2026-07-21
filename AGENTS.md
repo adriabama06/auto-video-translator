@@ -95,7 +95,7 @@ An open-source reference-based voice synthesis system (OpenAudio-S1-Mini) capabl
   * `TTS_BACKEND=fish-speech`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
   * `TTS_KEY`: API authorization key.
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.
 
 ### HiggsAudio v3 (`higgsv3`)
 Uses the 4-billion parameter Higgs-Audio v3 model via a `vllm-openai` or `vllm-omni` local server. Provides extremely realistic voice cloning.
@@ -110,7 +110,7 @@ Uses the 4-billion parameter Higgs-Audio v3 model via a `vllm-openai` or `vllm-o
   * `TTS_BACKEND=higgsv3`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
   * `TTS_KEY`: API authentication key.
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.
 
 ### IndexTTS 1.5 (`indextts1.5`)
 Provides high-performance voice cloning with simple configurations.
@@ -120,7 +120,7 @@ Provides high-performance voice cloning with simple configurations.
 * **Relevant Variables:**
   * `TTS_BACKEND=indextts1.5`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.
 
 ### OmniVoice (`omnivoice`)
 Optimized for GPUs with limited VRAM (~2.1 GB base VRAM), utilizing Gradio-based python endpoints.
@@ -132,7 +132,7 @@ Optimized for GPUs with limited VRAM (~2.1 GB base VRAM), utilizing Gradio-based
 * **Relevant Variables:**
   * `TTS_BACKEND=omnivoice`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.
 
 ### Qwen3-TTS (`qwen3tts`)
 High-quality voice cloning with a smaller memory footprint than Fish-Speech, utilizing Gradio-based python endpoints.
@@ -144,7 +144,7 @@ High-quality voice cloning with a smaller memory footprint than Fish-Speech, uti
 * **Relevant Variables:**
   * `TTS_BACKEND=qwen3tts`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.
 
 ### VoxCPM2 (`voxcpm2`)
 A multilingual voice-cloning model running over a custom local `vllm-omni` OpenAI-compliant server.
@@ -158,4 +158,4 @@ A multilingual voice-cloning model running over a custom local `vllm-omni` OpenA
   * `TTS_BACKEND=voxcpm2`
   * `TTS_HOST`: API base URL (local default: `http://localhost:8882`).
   * `TTS_KEY`: API authentication key.
-  * `TTS_HOST_SAMPLE`: Absolute path to your reference `.wav` file.
+  * `TTS_SAMPLE`: Absolute path to your reference `.wav` file.

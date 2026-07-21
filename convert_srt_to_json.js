@@ -1,5 +1,5 @@
 import fs from "fs";
-import { processSentences } from "./src/stt.js";
+import { processSentences } from "./src/textprocessor.js"; 
 
 const inputFile = process.argv[2];
 

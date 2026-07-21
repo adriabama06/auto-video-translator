@@ -1,4 +1,4 @@
-import { processSentences } from "../src/stt.js";
+import { processSentences } from "../src/textprocessor.js";
 
 const test_sequence_in_multiple_lines = [
     {

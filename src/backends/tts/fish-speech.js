@@ -7,7 +7,7 @@ import { getRandomName } from "../../tts.js";
 export function FishSpeechGenerateAudioCheckEnv() {
     let ENV_NOT_SET = [];
     
-    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+    for(const KEY of ["TTS_SAMPLE", "TTS_HOST"]) {
         if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
     }
 
@@ -98,15 +98,15 @@ export async function FishSpeechGenerateAudio(text, targetDuration) {
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBuffer = fs.readFileSync(process.env.TTS_HOST_SAMPLE);
+    const audioBuffer = fs.readFileSync(process.env.TTS_SAMPLE);
     const audioData = audioBuffer.toString("base64");
 
-    if(!fs.existsSync(process.env.TTS_HOST_SAMPLE + ".txt")) {
-        console.log(`[ERROR] FishSpeech requires a file named sample.wav.txt (Expected file: ${process.env.TTS_HOST_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+    if(!fs.existsSync(process.env.TTS_SAMPLE + ".txt")) {
+        console.log(`[ERROR] FishSpeech requires a file named sample.wav.txt (Expected file: ${process.env.TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
-    const audioText = fs.readFileSync(process.env.TTS_HOST_SAMPLE + ".txt", "utf-8").toString();
+    const audioText = fs.readFileSync(process.env.TTS_SAMPLE + ".txt", "utf-8").toString();
 
     /**
      * @type {FishSpeechData}

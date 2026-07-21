@@ -7,7 +7,7 @@ import { getRandomName } from "../../tts.js";
 export function IndexTTS15GenerateAudioCheckEnv() {
     let ENV_NOT_SET = [];
     
-    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+    for(const KEY of ["TTS_SAMPLE", "TTS_HOST"]) {
         if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
     }
 
@@ -31,7 +31,7 @@ export async function IndexTTS15GenerateAudio(text, targetDuration) {
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBytes = fs.readFileSync(process.env.TTS_HOST_SAMPLE);
+    const audioBytes = fs.readFileSync(process.env.TTS_SAMPLE);
     const audioBase64 = audioBytes.toString("base64");
 
     let response = await fetch(`${process.env.TTS_HOST}/synthesize`, {

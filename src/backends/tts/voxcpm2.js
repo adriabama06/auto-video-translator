@@ -7,7 +7,7 @@ import { getDuration, getSpeedFilter } from "../audio.js";
 export function VoxCPM2GenerateAudioCheckEnv() {
     let ENV_NOT_SET = [];
     
-    for(const KEY of ["TTS_HOST_SAMPLE", "TTS_HOST"]) {
+    for(const KEY of ["TTS_SAMPLE", "TTS_HOST"]) {
         if(!process.env[KEY]) ENV_NOT_SET.push(KEY);
     }
 
@@ -60,16 +60,16 @@ export async function VoxCPM2GenerateAudio(text, targetDuration, outputLang) {
     const temp_file = randomName + "_temp_" + ".wav";
     const final_file = randomName + ".wav";
 
-    const audioBuffer = await readFile(process.env.TTS_HOST_SAMPLE);
+    const audioBuffer = await readFile(process.env.TTS_SAMPLE);
     const audioBase64 = audioBuffer.toString("base64");
     const refAudioDataUrl = `data:audio/wav;base64,${audioBase64}`;
 
-    if(!fs.existsSync(process.env.TTS_HOST_SAMPLE + ".txt")) {
-        console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.TTS_HOST_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
+    if(!fs.existsSync(process.env.TTS_SAMPLE + ".txt")) {
+        console.log(`[ERROR] Is recommended to use a file named sample.wav.txt (Expected file: ${process.env.TTS_SAMPLE + ".txt"}) with the transcription of the sample audio.`);
         process.exit(0);
     }
 
-    const audioText = fs.readFileSync(process.env.TTS_HOST_SAMPLE + ".txt", "utf-8").toString();
+    const audioText = fs.readFileSync(process.env.TTS_SAMPLE + ".txt", "utf-8").toString();
 
     try {
         const arrayBuffer = await VoxCPM2Inference(refAudioDataUrl, audioText, text);

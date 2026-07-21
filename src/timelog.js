@@ -3,7 +3,9 @@ export class TimeLog {
         this.total = total;
         this.current = 0;
         this.startTime = Date.now();
-        process.stdout.write(`[0/${total}]`);
+        const initial = `[0/${total}]`;
+        process.stdout.write(initial);
+        this.lastLength = initial.length;
     }
 
     next() {
@@ -17,7 +19,13 @@ export class TimeLog {
             return m > 0 ? `${m}m ${sec}s` : `${sec}s`;
         };
         const line = `[${this.current}/${this.total}] ${fmt(elapsed)} elapsed, ~${fmt(remaining)} remaining`;
-        process.stdout.write(`\r${line.padEnd(80)}`);
+        const extra = this.lastLength > line.length ? this.lastLength - line.length : 0;
+        if (extra > 0) {
+            process.stdout.write(`\r${line}${" ".repeat(extra)}\r${line}`);
+        } else {
+            process.stdout.write(`\r${line}`);
+        }
+        this.lastLength = line.length;
         if (this.current === this.total) {
             process.stdout.write("\n");
         }

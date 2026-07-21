@@ -11,6 +11,8 @@ async function main() {
     const inputFile = process.argv[2];
     const inputLang = process.argv[3];
     const outputLang = process.argv[4];
+    
+    loadArgs();
 
     if (!inputFile || !inputLang || !outputLang) {
         console.log(`
@@ -27,7 +29,6 @@ Example:
         throw new Error(`File does not exist: ${inputFile}`);
     }
 
-    loadArgs();
     checkEnv();
 
     /**
@@ -98,7 +99,7 @@ Example:
         "-ac", "1",        // ya es mono, pero esto lo garantiza
         "-ar", "24000",    // mantener 24 kHz
         "-c:a", "pcm_s16le", // salida en PCM 16-bit
-        "-y", `${inputFile.split('.').slice(0, -1).join('.') + "_" + outputLang + ".wav"}`
+        "-y", process.env.OUTPUT ?? `${inputFile.split('.').slice(0, -1).join('.') + "_" + outputLang + ".wav"}`
     );
 
     const ff = spawn("ffmpeg", args);
@@ -113,7 +114,7 @@ Example:
         // Clear files
         audios.forEach(f => fs.unlinkSync(f));
 
-        if (code === 0) console.log(`Join complete, file ready at: ${inputFile.split('.').slice(0, -1).join('.') + "_" + outputLang + ".wav"}`);
+        if (code === 0) console.log(`Join complete, file ready at: ${process.env.OUTPUT ?? inputFile.split('.').slice(0, -1).join('.') + "_" + outputLang + ".wav"}`);
         else console.error(new Error(`[${code}] Error on join audio files`));
     });
 }

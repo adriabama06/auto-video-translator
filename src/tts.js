@@ -20,7 +20,12 @@ while(fs.readdirSync(".").find(f => f.startsWith(`WF_${WORKFLOW_ID}`))) {
 fs.mkdirSync(`WF_${WORKFLOW_ID}`);
 
 process.on("exit", () => {
-    fs.rmSync(`WF_${WORKFLOW_ID}`, { recursive: true, force: true });
+    if(!(process.env.KEEP_WORKFLOW && process.env.KEEP_WORKFLOW == "true")) fs.rmSync(`WF_${WORKFLOW_ID}`, { recursive: true, force: true });
+});
+
+process.on("SIGINT", () => {
+    if(!(process.env.KEEP_WORKFLOW && process.env.KEEP_WORKFLOW == "true")) fs.rmSync(`WF_${WORKFLOW_ID}`, { recursive: true, force: true });
+    process.exit(0);
 });
 
 let count = 0;
